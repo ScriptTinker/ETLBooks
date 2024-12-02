@@ -2,6 +2,7 @@ from datetime import datetime
 from ETLBooks_flask import db, login_manager
 from flask_login import UserMixin
 
+
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
@@ -18,13 +19,13 @@ class User(db.Model, UserMixin):
     def __repr__(self):
         return f"User:'{self.username}','{self.email}''{self.image}'"
     
-class Post(db.Model):
+class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    title = db.Column(db.String(20), nullable=False)   
-    date_posted = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
-    content = db.Column(db.Text, nullable=False)
-
-    id_User = db.Column(db.Integer,db.ForeignKey("user.id"), nullable=False)
+    name = db.Column(db.String(255))
+    price = db.Column(db.Float)
+    review = db.Column(db.String(50))
+    category = db.Column(db.String(255))
+    availability = db.Column(db.String(50))  
 
     def __repr__(self):
-        return f"User:'{self.title}','{self.date_posted}''{self.image}'"
+        return f'<Book {self.name}>'
