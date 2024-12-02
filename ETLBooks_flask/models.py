@@ -1,5 +1,5 @@
 from datetime import datetime
-from flask_tutorial import db, login_manager
+from ETLBooks_flask import db, login_manager
 from flask_login import UserMixin
 
 @login_manager.user_loader
