@@ -1,7 +1,8 @@
 import requests
 from bs4 import BeautifulSoup
-from ETLBooks_flask.models import Book
-from ETLBooks_flask import app,db
+from models import Book
+from __init__ import app,db
+
 
 def web_scraper():
     def checkPagination(): 
@@ -37,23 +38,23 @@ def web_scraper():
                     review = book.find('p', class_='star-rating')['class'][1]  # Star rating
                     
 
-                    book_dive_url = "https://books.toscrape.com/catalogue" + book.h3.a["href"].replace("../../../', '/")
+                    book_dive_url = "https://books.toscrape.com/catalogue" + book.h3.a["href"].replace("../../../","/")
                     # Now we dive into each book for aditional data.                                 ^^^ This clears the previous path of the href
                     response = requests.get(book_dive_url)
-                    soup = BeautifulSoup(response.text)
+                    soup = BeautifulSoup(response.text, "lxml")
 
                     availability_text = soup.find("p", class_="instock availability").text.strip()
 
                     if "in stock" in availability_text.lower():
                         avalability = True
                         stock_text = availability_text.split()[-2]
-                        stock = int(stock_text)
+                        stock = int(stock_text.strip("("))
                     else:
                         avalability = False
                         stock = 0
 
                     # Insert book data into the database using SQLAlchemy
-                    new_book = Book(name=name, price=float(price.replace("£", "")), review=review, category=category)
+                    new_book = Book(name=name, price=float(price.replace("£", "")), review=review, category=category , avalability = avalability, stock = stock)
                     db.session.add(new_book)
 
                 while checkPagination():
@@ -69,13 +70,17 @@ def web_scraper():
                         price = book.find('p', class_='price_color').text[1:]
                         review = book.find('p', class_='star-rating')['class'][1]
 
-                        book_dive_url = "https://books.toscrape.com/catalogue" + book.h3.a["href"].replace("../../../', '/")
-                        # Now we dive into each book for aditional data.                                 ^^^ This clears the previous path of the href
-                        
+                        if "in stock" in availability_text.lower():
+                            avalability = True
+                            stock_text = availability_text.split()[-2]
+                            stock = int(stock_text.strip("("))
+                        else:
+                            avalability = False
+                            stock = 0
 
-                        # Insert book data into the database using SQLAlchemy
-                        new_book = Book(name=name, price=float(price.replace("£", "")), review=review, category=category)
-                        db.session.add(new_book)
+                    # Insert book data into the database using SQLAlchemy
+                    new_book = Book(name=name, price=float(price.replace("£", "")), review=review, category=category , avalability = avalability, stock = stock)
+                    db.session.add(new_book)
 
             except Exception as e:
                 print(f"Error at {e}")

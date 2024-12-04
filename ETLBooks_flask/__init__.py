@@ -11,12 +11,10 @@ login_manager = LoginManager(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///site.db"
 
-app.config ["SECRET_KEY"] = "b269b45688f5a5fd3408a8ddf9b147a7"
+app.config ["SECRET_KEY"] = ""
 
 db = SQLAlchemy(app)
 
 login_manager.login_view = "login"
 
 login_manager.login_message_category = "info"
-
-from ETLBooks_flask import routes
