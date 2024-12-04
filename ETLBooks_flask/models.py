@@ -13,7 +13,7 @@ class User(db.Model, UserMixin):
     username = db.Column(db.String(20), nullable=False, unique=True)
     email = db.Column(db.String(120), nullable=False, unique=True) 
     image = db.Column(db.String(20), nullable=False, default = "default.jpg")
-    password = db.Column(db.String(60), nullable=False)  #^^^ remeber to have uniform names!!!
+    password = db.Column(db.String(60), nullable=False)  
 
     def __repr__(self):
         return f"User:'{self.username}','{self.email}''{self.image}'"
@@ -26,6 +26,7 @@ class Book(db.Model):
     category = db.Column(db.String(255), nullable = False)
     avalability = db.Column(db.Boolean, nullable = False)
     stock = db.Column(db.Integer)
+    image = db.Column(db.Blob)
 
     def __repr__(self):
         return f'<Book {self.name}, {self.category},{self.price}>'
