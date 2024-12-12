@@ -8,7 +8,7 @@ def install_requirements():
 
 try:
     # Try importing the app
-    from ETLBooks_flask import app
+    from ETLBooks_flask import app,models
 
 except ImportError:
     # If some packages are missing, install them
@@ -18,6 +18,6 @@ except ImportError:
     
     from ETLBooks_flask import app
 
-
 if __name__ == "__main__":
     app.run(debug=True)
+    

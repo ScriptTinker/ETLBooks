@@ -1,7 +1,7 @@
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField,FileAllowed
 from flask_login import current_user
-from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField
+from wtforms import StringField, PasswordField, SubmitField, BooleanField, TextAreaField, DecimalField,SelectField,IntegerField
 from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationError
 from ETLBooks_flask.models import User
 
@@ -59,9 +59,16 @@ class UpdateAccountForm(FlaskForm):
             if email:
                 raise ValidationError("That username is taken! Please choose another one")
             
-class PostForm(FlaskForm):
-    title = StringField("Title", 
-                        validators=[DataRequired()])
-    content = TextAreaField("Content",
-                            validators=[DataRequired()]) 
-    submit = SubmitField("Post")          
+class BookForm(FlaskForm):
+    title = StringField("Title",
+                        validators=[DataRequired(),Length(min=1, max=255)])
+    price = DecimalField("Price",
+                         validators=[DataRequired()])
+    review = SelectField(choices=[('One', 'One'), ('Two', 'Two'), ('Three', 'Three'), ('Four', 'Four'), ('Five', 'Five')])
+    category = StringField("Category",
+                            validators=[DataRequired(),Length(min=1,max=255)])
+    availability = BooleanField("Available?",
+                                 validators=[DataRequired()])
+    stock = IntegerField("Stock", 
+                         validators=[DataRequired()])
+    image = FileField("Book cover", validators=[FileAllowed(["jpg","png"])])       

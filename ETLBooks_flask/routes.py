@@ -3,8 +3,8 @@ from models import User,Book
 from forms import RegistrationForm, LoginForm, UpdateAccountForm
 from ETLBooks_flask import app,db,bycrypt
 from flask_login import login_user,current_user,logout_user,login_required
-from PIL import Image
 from web_scraper import web_scraper
+
 
 @app.route("/")
 @app.route("/login", methods = ["GET","POST"])
@@ -23,6 +23,14 @@ def login():
             flash("Logging failed! Try again!", "danger")
 
     return render_template("Login.html", title= "Login", form=form)
+
+"""
+^^^^^^^^^^^^^^^^^^^^^^^^
+This is just a demo to implement a logging system with certain roles where the admin can
+access all the features while operators could only add books,remove etc...
+There is a version without logging for easier access
+The email and password for the main admin would be admin@test.com and admin respectively
+"""
 
 @app.route("/logout")
 def logout():
@@ -47,11 +55,19 @@ def books():
     pass
 
 @login_required
+@app.route("")
+
+@login_required
 @app.route("/home/scrape")
 def scrape():
     web_scraper()
 
 @login_required
 @app.route("/analyse")
+def analyse():
+    pass
+
+@login_required
+@app.route("/analyse/pie-chart")
 def analyse():
     pass
