@@ -11,15 +11,14 @@ def load_user(user_id):
 class User(db.Model, UserMixin):
 
     id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
+    name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True) 
-    image = db.Column(db.String(20), nullable=False, default = "default.jpg")
     password = db.Column(db.String(60), nullable=False)
     role = db.Column(db.String(30), nullable=False)
                     
 
     def __repr__(self):
-        return f"User:'{self.username}','{self.email}'"
+        return f"User:'{self.name}','{self.email}'"
     
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -37,3 +36,11 @@ class Book(db.Model):
     def __repr__(self):
         return f'<Book {self.name}, {self.category},{self.price}>'
 
+class Progress(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    total_books = db.Column(db.Integer, default = 0)
+    processed_books = db.Column(db.Integer, default = 0)
+    cancelled = db.Column(db.Boolean, default = False)
+
+    #user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
+    #user = db.relationship('User', backref='progress') 

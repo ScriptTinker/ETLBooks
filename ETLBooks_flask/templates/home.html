@@ -1,25 +1,36 @@
 {% extends "layout.html" %}
 
 {% block content %}
-        {% for post in posts.items %}
-        <article class="media content-section">
-            <img class="rounded-circle article-img" src="{{ url_for('static', filename='profile_pics/'+ post.author.image) }}">
-            <div class="media-body">
-              <div class="article-metadata">
-                <a class="mr-2" href="#">{{ post.author.username }}</a>
-                <small class="text-muted">{{ post.date_posted.strftime("%Y-%m-%d") }}</small>
-              </div>
-              <h2><a class="article-title" href="{{ url_for('post', post_id=post.id)}}">{{ post.title }}</a></h2>
-              <p class="article-content">{{ post.content }}</p>
-            </div>
-          </article>
-        {% endfor %}
+    <!-- Check if there are no books, display scrape button -->
+    {% if books.items|length == 0 %}
+        <button id="scrape-btn" class="btn btn-primary mb-4">Start Scraping</button>
+    {% endif %}
 
-        {% for page_num in posts.iter_pages() %}
-          {% if page_num %}
+    <!-- Loading Bar (Initially hidden) -->
+    <div id="loading-bar-container" style="display: none;">
+        <div class="progress">
+            <div id="loading-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    {% for book in books.items %}
+        <article class="media content-section">
+            <div class="media-body">
+                <div class="article-metadata">
+                    <a class="mr-2" href="#">{{ book.name }}</a>
+                    <small class="text-muted">{{ book.date_extracted }}</small>
+                </div>
+                <h2><a class="article-title" href="#">{{ book.title }}</a></h2>
+                <p class="article-content">{{ book.content }}</p>
+            </div>
+        </article>
+    {% endfor %}
+
+    {% for page_num in books.iter_pages() %}
+        {% if page_num %}
             <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num)}}">{{page_num}}</a>
-          {% else %}
+        {% else %}
             ...
-          {% endif %}
-        {% endfor %}
-{% endblock content %}  
+        {% endif %}
+    {% endfor %}
+{% endblock content %}

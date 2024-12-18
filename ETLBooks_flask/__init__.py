@@ -12,7 +12,9 @@ login_manager = LoginManager(app)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///ETLbook.db"
 
-app.config ["SECRET_KEY"] = ""
+app.config ["SECRET_KEY"] = "secret_key"
+
+app.config['DEBUG'] = True
 
 db = SQLAlchemy(app)
 
@@ -20,8 +22,9 @@ login_manager.login_view = "login"
 
 login_manager.login_message_category = "info"
 
-from ETLBooks_flask.models import User,Book
+from ETLBooks_flask.models import User,Book,Progress
 with app.app_context():
     if not os.path.exists('/istance/ETLbook.db'):
         db.create_all()
-        
+
+from ETLBooks_flask import routes        

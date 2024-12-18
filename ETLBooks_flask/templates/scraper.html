@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mb-2">
+    <h1>Web Scraper</h1>
+</div>    
+<div class="container mt-1">
+    <button id="prepareScraperBtn" class="btn btn-primary">Prepare Scraper</button>
+    <button id="startScrapingBtn" class="btn btn-success" style="display:none;">Start Scraping</button>
+    <div class="loading-spinner" id="loadingSpinner" style="display:none;">
+        <div class="spinner-border" role="status">
+            <span class="sr-only">Loading...</span>
+        </div>
+    </div>
+</div>
+
+<div class="progress mt-4">
+    <div class="progress-bar progress-bar-striped progress-bar-animated" id="progressBar" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" style="width:0%"></div>
+</div>
+
+<div class="m-2">
+    <button id="cancelScraperBtn" class="btn btn-danger" style="display: none;" disabled=true>Cancel</button>
+</div>
+
+<!-- Link to your JavaScript file -->
+<script src="{{url_for('static', filename='JS/loading_bar.js')}}"></script>
+
+{% endblock %}

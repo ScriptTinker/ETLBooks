@@ -6,7 +6,7 @@ from wtforms.validators import DataRequired, Length, Email, EqualTo, ValidationE
 from ETLBooks_flask.models import User
 
 class RegistrationForm(FlaskForm):
-    username = StringField("Username",
+    name = StringField("Name",
                             validators = [DataRequired(),Length(min= 2, max= 20)])
     email = StringField("Email",
                             validators = [DataRequired(),Email()])
@@ -15,12 +15,7 @@ class RegistrationForm(FlaskForm):
     confirm_password = PasswordField("Confrim Password", 
                                      validators=[DataRequired(), EqualTo("password")])
     submit = SubmitField("Sign up")
-
-    def validate_username(self,username):
-        user = User.query.filter_by(username = username.data).first()
-        if user:
-            raise ValidationError("That username is taken! Please choose another one")
-        
+    
     def validate_email(self,email):
         user = User.query.filter_by(email = email.data).first()
         if user:
@@ -43,15 +38,7 @@ class UpdateAccountForm(FlaskForm):
                             validators = [DataRequired(),Length(min= 2, max= 20)])
     email = StringField("Email",
                             validators = [DataRequired(),Email()])
-    picture = FileField("Update Profile Picture",
-                         validators=[FileAllowed(["jpg","png"])])
     submit = SubmitField("Update")
-
-    def validate_username(self,username):
-        if username.data != current_user.username:
-            user = User.query.filter_by(username = username.data).first()
-            if user:
-                raise ValidationError("That username is taken! Please choose another one")
         
     def validate_email(self,email):
         if email.data != current_user.email:
