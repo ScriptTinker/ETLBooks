@@ -5,13 +5,15 @@ from ETLBooks_flask import app,db,bycrypt
 from flask_login import login_user,current_user,logout_user,login_required
 from web_scraper import web_scraper
 from book_counter import book_counter
-from plotly_graphs import dash_app
+import plotly_graphs
 
 
 @app.route("/")
 @app.route("/login", methods = ["GET","POST"])
 def login():
     form = LoginForm()
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     if form.validate_on_submit():
         user= User.query.filter_by(email=form.email.data).first()
         if user and bycrypt.check_password_hash(user.password, form.password.data):
@@ -33,7 +35,6 @@ The email and password for the main admin would be admin@test.com and admin resp
 
 REMEMBER THAT YOU JUST REWRITE THE CODE TO DEBUG IT 
 YOU REMOVED LOGINGS,TEMPLATES AND MUST ADD A WAY TO UPDATE THE IFRAMES OF THE DATA IN A DYNAMIC WAY!!!!
-YOU MUST CREATE A SESSION THAT KEEPS TRACK OF TOTAL BOOKS AND DEVIDE THEM BY PROCESS BOOK FOR THE LOADING BAR!
 YOU MUST LEARN JS YOU FUCKING IDIOT
 """
 
@@ -50,10 +51,21 @@ def home():
     return render_template("home.html", title= "Homepage", page = page, books=books)
 
 
-@app.route("/register")
+@app.route("/register", methods = ["GET", "POST"])
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for("home"))
     form = RegistrationForm()
-    return render_template("register.html",form = form)
+    if form.validate_on_submit():
+        hashed_password = bycrypt.generate_password_hash(form.password.data).decode("UTF-8")
+        user = User(name=form.name.data, email=form.email.data,password=hashed_password )
+        db.session.add(user)
+        db.session.commit()
+
+        flash(f"Your account has been created!You can now log in!", "success")
+        return redirect(url_for("home"))
+        
+    return render_template("Register.html", title= "Register", form=form)
 
 @app.route("/scraper")
 def scraper():
@@ -130,3 +142,7 @@ def delete_book():
 @app.route("/analyse/")
 def analyse():
     return render_template("analyse.html")
+
+@app.route("/analyse/pie_chart")
+def pie_chart():
+    return render_template("pie_chart.html")

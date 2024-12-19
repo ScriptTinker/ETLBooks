@@ -1,17 +1,11 @@
-{% extends "layout.html" %}
+{% extends "layout3.html" %}
 
 {% block content %}
     <!-- Check if there are no books, display scrape button -->
     {% if books.items|length == 0 %}
-        <button id="scrape-btn" class="btn btn-primary mb-4">Start Scraping</button>
+        <button id="scrape-btn" class="btn btn-primary mb-3 mt-2">Start Scraping</button>
+        <p> Oh no! It's seems that there are no books at the moment! Click on Start Scrape to access the scraper to begain analysing the data!</p>
     {% endif %}
-
-    <!-- Loading Bar (Initially hidden) -->
-    <div id="loading-bar-container" style="display: none;">
-        <div class="progress">
-            <div id="loading-bar" class="progress-bar progress-bar-striped progress-bar-animated" style="width: 0%;"></div>
-        </div>
-    </div>
 
     {% for book in books.items %}
         <article class="media content-section">

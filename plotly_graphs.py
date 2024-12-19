@@ -1,54 +1,60 @@
 import plotly.express as px
 import pandas as pd
-from dash import Dash, dcc, html
+import dash
+from dash import dcc, html
 from dash.dependencies import Input, Output
-from ETLBooks_flask import app
+from ETLBooks_flask import app,db
 from ETLBooks_flask.models import Book
 
-# Funzione per gestire gli errori
-def handle_error(e):
-    print(f"Si è verificato un errore: {e}")
-    return "Si è verificato un errore durante l'elaborazione della richiesta.", 500
-
-# Creazione del DataFrame
 with app.app_context():
-    try:
-        data = Book.query.all()
-        if not data:  # Check if there are no books in the database
-            df = pd.DataFrame()  # Create an empty DataFrame
-        else:
-            # Convert SQLAlchemy objects to dicts
-            data_dict = [book.__dict__ for book in data]
-            # Remove SQLAlchemy internal attributes like _sa_instance_state
-            for item in data_dict:
-                item.pop('_sa_instance_state', None)
-            df = pd.DataFrame(data_dict)
-    except Exception as e:
-        handle_error(e)
 
+    #Cleaning Data!
+    books = Book.query.all()
+    books_data = [book.__dict__ for book in books]
+    for book in books_data:
+        book.pop('_sa_instance_state')#Removes internal attributes that affects data accuracy 
+    #Cleaning Data!
+    """
+    The standard SQLAlchemy query made a single instance of data meaning that it
+    was somewhat hard to filter in pandas....
 
-if df.empty:
-    empty_data_message = "No books found. Please scrape some data first."
-else:
-    empty_data_message = None
+    """
 
-#First Dash graph about the composition of the books
+    df = pd.DataFrame(books_data)
 
-dash_app = Dash(__name__, server=app, url_base_pathname='/dash/pie-chart/')
+    """
+    The first Graph rappresents the composition of each category 
+    to see which one is more popular with authors(<< example) so
+    we count the number of books per category, devide them by the 
+    total all easy thanks to plotly/dash
+    """
 
-# Add a condition to the callback function to handle empty data
-@dash_app.callback(
-    Output('line-chart', 'figure'),
-)
-def update_pie_chart(selected_category):
-    if df.empty:
-        return {}  # Return an empty chart if there's no data
+    dash_composition = dash.Dash(__name__, server=app, url_base_pathname='/dash/pie_chart/')
 
-    try:
-        categories = [book.category for book in data]
-        category_counts = {category: categories.count(category) for category in set(categories)}
-        pie_fig = px.pie(category_counts, names='category', values='counts', title='Most prevalent book')
-    except Exception as e:
-        return handle_error(e)
-    
-    return  dcc.Graph(figure=pie_fig)
+    category_counts = df['category'].value_counts().reset_index()
+    category_counts.columns=["Category","Book Count"]
+
+    #Define "Other Category!"
+    threshold = 13#<< is the perfect number for a good looking graph
+    small_categories = category_counts[category_counts['Book Count'] < threshold]
+    others_count = small_categories['Book Count'].sum()
+    category_counts = category_counts[category_counts['Book Count'] >= threshold]
+    category_counts = category_counts._append(pd.DataFrame({'Category': ['Others'],
+                                                             'Book Count': [others_count]}))
+    #Define "Other Category!"
+
+    """
+    Because of the high number of categories the graph is a bit of a mess
+    So we clean it up with an "other" category
+    The last line means: Cat.counts is = to Cat.count plus an appended 
+                         new column called Other! 
+    """
+
+    fig_composition = px.pie(category_counts,names="Category",values="Book Count", title="Category composition")
+
+    dash_composition.layout= html.Div(
+        children=[ 
+        dcc.Graph(figure=fig_composition)
+    ], 
+        style={'margin-left': '20px'}
+    )

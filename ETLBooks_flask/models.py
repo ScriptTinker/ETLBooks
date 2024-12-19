@@ -14,7 +14,7 @@ class User(db.Model, UserMixin):
     name = db.Column(db.String(20), nullable=False)
     email = db.Column(db.String(120), nullable=False, unique=True) 
     password = db.Column(db.String(60), nullable=False)
-    role = db.Column(db.String(30), nullable=False)
+    role = db.Column(db.String(30), nullable=False, default="Operator")
                     
 
     def __repr__(self):

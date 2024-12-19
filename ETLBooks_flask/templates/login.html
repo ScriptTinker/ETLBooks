@@ -1,36 +1,9 @@
 {% extends "layout2.html" %}
 {% block content %}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename ='login.css') }}">
 <section class="pb-4">
     <div class="border rounded-5">
-      
       <section class="w-100">
-        <style>
-          .divider:after,
-          .divider:before {
-            content: "";
-            flex: 1;
-            height: 1px;
-            background: #eee;
-          }
-          
-          .rounded-circle {
-              margin-left: auto;
-              margin-right: auto;
-              display: block;
-              height: auto;
-            }
-
-          @media (max-width: 1000px) {
-            .rounded-circle {
-              display: block;
-              margin-left: auto;
-              margin-right: auto;
-              width: 80%; 
-              height: auto;
-              margin-bottom: 15px; 
-            }
-          }
-        </style>
         <div class="container-fluid h-custom">
           <div class="row d-flex justify-content-center align-items-center">
             <div class="col-md-9 col-lg-6 col-xl-6 my-lg-5 py-lg-5 h-custom">
