@@ -5,8 +5,7 @@ from ETLBooks_flask import app,db,bycrypt
 from flask_login import login_user,current_user,logout_user,login_required
 from web_scraper import web_scraper
 from book_counter import book_counter
-import plotly_graphs
-
+from plotly_graphs import composition_thumbnail
 
 @app.route("/")
 @app.route("/login", methods = ["GET","POST"])
@@ -141,7 +140,7 @@ def delete_book():
 
 @app.route("/analyse")
 def analyse():
-    return render_template("analyse.html")
+    return render_template("analyse.html", composition_thumbnail=composition_thumbnail)
 
 @app.route("/analyse/pie_chart")
 def pie_chart():
