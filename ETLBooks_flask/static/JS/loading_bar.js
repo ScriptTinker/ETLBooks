@@ -61,6 +61,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error during preparation:', error);
                 alert('An error occurred during preparation.');
                 loadingSpinner.style.display = 'none';
+                prepareScraperBtn.style.display = 'block';
+                prepareScraperBtn.disabled = false
             });
     });
 

@@ -139,7 +139,7 @@ def new_book():
 def delete_book():
     pass
 
-@app.route("/analyse/")
+@app.route("/analyse")
 def analyse():
     return render_template("analyse.html")
 

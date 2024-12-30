@@ -1,4 +1,5 @@
 import requests
+from flask import flash
 from bs4 import BeautifulSoup
 from ETLBooks_flask.models import Book,Progress
 from ETLBooks_flask import app,db
@@ -16,12 +17,21 @@ A simple check to see if the next button exists
 If it does, dive into the next page and extract data
 Otherwise retrun false and continue to next category
 """
+def retry_scrape(url):
+    for i in range (1,3):
+        flash(f"It seems that the site isn't responding... Trying again(Try:{i}", "warning")
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response
+    flash("Error while trying to scrape!")        
 
 
 def web_scraper():
     with app.app_context(): 
         base_url = "https://books.toscrape.com"
         response = requests.get(base_url)
+        if response.status_code != 200:
+            response=retry_scrape(base_url)
         soup = BeautifulSoup(response.text, "lxml")
         i = 2  # Start at page 2 for pagination
         progress = Progress.query.first()
@@ -42,6 +52,8 @@ def web_scraper():
             try:
                 url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(" ", "-")}_{i}/index.html"
                 response = requests.get(url)
+                if response.status_code != 200:
+                    response=retry_scrape(url)
                 soup = BeautifulSoup(response.text, "lxml")
                 pagecount = 2  # Reset page count for each category
 
@@ -65,6 +77,8 @@ def web_scraper():
                     book_dive_url = "https://books.toscrape.com/catalogue" + book.h3.a["href"].replace("../../../","/")
                     # Now we dive into each book for aditional data.                                 ^^^ This clears the previous path of the href(see webiste for reference)
                     response = requests.get(book_dive_url)
+                    if response.status_code != 200:
+                        response=retry_scrape(book_dive_url)
                     soup = BeautifulSoup(response.text, "lxml")
 
                     availability_text = soup.find("p", class_="instock availability").text.strip()
@@ -96,6 +110,8 @@ def web_scraper():
                 while checkPagination(url):
                     url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(" ", "-")}_{i}/page-{pagecount}.html"
                     response = requests.get(url)
+                    if response.status_code != 200:
+                        response=retry_scrape(url)
                     soup = BeautifulSoup(response.text, "lxml")
                     pagecount += 1
 
@@ -118,6 +134,8 @@ def web_scraper():
                         book_dive_url = "https://books.toscrape.com/catalogue" + book.h3.a["href"].replace("../../../","/")
                         # Now we dive into each book for aditional data.                                 ^^^ This clears the previous path of the href(see webiste for reference)
                         response = requests.get(book_dive_url)
+                        if response.status_code != 200:
+                            response=retry_scrape(book_dive_url)
                         soup = BeautifulSoup(response.text, "lxml")
 
                         availability_text = soup.find("p", class_="instock availability").text.strip()

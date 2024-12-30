@@ -9,7 +9,7 @@ from ETLBooks_flask.models import Book
 with app.app_context():
 
     #Cleaning Data!
-    books = Book.query.all()
+    books = Book.query.distinct(Book.name).all()
     books_data = [book.__dict__ for book in books]
     for book in books_data:
         book.pop('_sa_instance_state')#Removes internal attributes that affects data accuracy 
@@ -20,7 +20,11 @@ with app.app_context():
 
     """
 
-    df = pd.DataFrame(books_data)
+    if books_data is None:
+        df_composition = {}
+    else:
+        df_composition = pd.DataFrame(books_data)
+        print (df_composition)
 
     """
     The first Graph rappresents the composition of each category 
@@ -31,7 +35,7 @@ with app.app_context():
 
     dash_composition = dash.Dash(__name__, server=app, url_base_pathname='/dash/pie_chart/')
 
-    category_counts = df['category'].value_counts().reset_index()
+    category_counts = df_composition.value_counts().reset_index()
     category_counts.columns=["Category","Book Count"]
 
     #Define "Other Category!"
