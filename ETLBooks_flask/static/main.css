@@ -78,3 +78,8 @@ body {
   .account-heading {
     font-size: 2.5rem;
   }
+
+  .sidebar {
+    margin-left: 650px;
+    position: fixed;
+  }

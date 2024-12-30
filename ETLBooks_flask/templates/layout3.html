@@ -40,7 +40,7 @@
           </header>
           <main role="main" class="container">
             <div class="row">
-              <div class="col-md-8">
+              <div class="col-md-9">
                 {% with messages = get_flashed_messages(with_categories = true) %}
                     {% if messages %}
                         {% for category, message in messages %}
@@ -51,6 +51,19 @@
                     {% endif %}
                 {% endwith %}
                 {% block content %}{% endblock %}
+              </div>
+              <div class="col-md-3 sidebar ">
+                <div class="content-section">
+                  <h3>Quick access</h3>
+                  <p>
+                    <ul class="list-group">
+                      <li class="list-group-item list-group-item-light">Scraper</li>
+                      <li class="list-group-item list-group-item-light">Books</li>
+                      <li class="list-group-item list-group-item-light">Overview</li>
+                      <li class="list-group-item list-group-item-light">etc</li>
+                    </ul>
+                  </p>
+                </div>
               </div>
           </main>
         <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
