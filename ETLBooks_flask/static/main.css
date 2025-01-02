@@ -80,6 +80,18 @@ body {
   }
 
   .sidebar {
-    margin-left: 650px;
+    margin-left: 60% ;
+    flex-direction: column;
     position: fixed;
   }
+
+  .home_selection {
+    width: 240px;
+    height: 174px;
+  }
+
+@media (max-width:768px){
+  .sidebar{
+    display: none;
+  }
+}  

@@ -7,7 +7,8 @@ from web_scraper import web_scraper
 from book_counter import book_counter
 from plotly_graphs import composition_thumbnail
 
-@app.route("/")
+
+@app.route("/", methods = ["GET", "POST"])
 @app.route("/login", methods = ["GET","POST"])
 def login():
     form = LoginForm()
@@ -40,14 +41,17 @@ YOU MUST LEARN JS YOU FUCKING IDIOT
 @app.route("/logout")
 def logout():
     logout_user()
-    return redirect(url_for("home"))
-
+    return redirect(url_for("login"))
 
 @app.route("/home")
 def home():
+    return render_template("home.html")
+
+@app.route("/overview")
+def overview():
     page = request.args.get("page", type=int)
     books = Book.query.paginate(page=page,per_page=10)
-    return render_template("home.html", title= "Homepage", page = page, books=books)
+    return render_template("overview.html", title= "Overview", page = page, books=books)
 
 
 @app.route("/register", methods = ["GET", "POST"])
@@ -62,7 +66,7 @@ def register():
         db.session.commit()
 
         flash(f"Your account has been created!You can now log in!", "success")
-        return redirect(url_for("home"))
+        return redirect(url_for("login"))
         
     return render_template("Register.html", title= "Register", form=form)
 

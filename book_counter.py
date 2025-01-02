@@ -1,4 +1,4 @@
-from flask import session
+from flask import flash
 import requests
 from bs4 import BeautifulSoup
 from ETLBooks_flask import app
@@ -9,9 +9,20 @@ def checkPagination(url):
     next_button = soup.find("li", class_="next")
     return next_button is not None
 
+def retry_scrape(url):
+    for i in range (1,3):
+        flash(f"It seems that the site isn't responding... Trying again(Try:{i}", "warning")
+        response = requests.get(url)
+        if response.status_code == 200:
+            return response
+    flash("Error while trying to scrape!")        
+
+
 def book_counter():
     base_url = "https://books.toscrape.com"
     response = requests.get(base_url)
+    if response.status_code != 200:
+        retry_scrape(base_url)
     soup = BeautifulSoup(response.text, "lxml")
 
     ol = soup.find("div", class_="side_categories")
@@ -31,6 +42,8 @@ def book_counter():
             try:
                 url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(" ", "-")}_{i}/index.html"
                 response = requests.get(url)
+                if response != 200:
+                    response.status_code = retry_scrape(url)
                 soup = BeautifulSoup(response.text, "lxml")
                 pagecount = 2
 
@@ -38,19 +51,19 @@ def book_counter():
 
                     
                 total_books = total_books + len(books)
-                session["total_books"] = total_books
 
                 while checkPagination(url):
 
                     url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(" ", "-")}_{i}/page-{pagecount}.html"
                     response = requests.get(url)
+                    if response.status_code != 200:
+                        response = retry_scrape(url)
                     soup = BeautifulSoup(response.text, "lxml")
                     pagecount += 1
 
                     books = soup.find_all("article", class_="product_pod")
 
                     total_books = total_books + len(books)
-                    session["total_books"] = total_books
 
                 i += 1
             except Exception as e:

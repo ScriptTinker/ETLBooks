@@ -7,11 +7,9 @@ def install_requirements():
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements_versions.txt"])
 
 try:
-    # Try importing the app
     from ETLBooks_flask import app,models
 
 except ImportError:
-    # If some packages are missing, install them
     print("Some packages are missing! Installing now...")
     install_requirements()
 
