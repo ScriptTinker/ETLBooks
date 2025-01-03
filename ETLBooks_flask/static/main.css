@@ -90,8 +90,15 @@ body {
     height: 174px;
   }
 
+  .sm-dropdown{
+    display: none;
+  }
+  
 @media (max-width:768px){
   .sidebar{
     display: none;
   }
-}  
+}
+  .sm-dropdown{
+    display: block;
+  }

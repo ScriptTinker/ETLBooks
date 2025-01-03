@@ -1,0 +1,32 @@
+{% extends "layout2.html" %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header d-flex align-items-center bg-steel">
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6 text-center">
+                            <img src="{{url_for('static', filename='Logo.png')}}" alt="Password Reset Image" class="img-fluid rounded-circle">
+                        </div>
+                        <div class="col-md-6">
+                            <form action="/send-reset-link" method="POST">
+                                <div class="mb-3">
+                                    {{ form.email.lable}}
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                </div>
+                                <div class="d-grid gap-2">
+                                    <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

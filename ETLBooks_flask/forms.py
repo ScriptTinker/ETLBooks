@@ -34,7 +34,7 @@ class LoginForm(FlaskForm):
 
 
 class UpdateAccountForm(FlaskForm):
-    username = StringField("Username",
+    name = StringField("Name",
                             validators = [DataRequired(),Length(min= 2, max= 20)])
     email = StringField("Email",
                             validators = [DataRequired(),Email()])
@@ -44,7 +44,7 @@ class UpdateAccountForm(FlaskForm):
         if email.data != current_user.email:
             email = User.query.filter_by(email = email.data).first()
             if email:
-                raise ValidationError("That username is taken! Please choose another one")
+                raise ValidationError("That email is taken! Please choose another one")
             
 class BookForm(FlaskForm):
     title = StringField("Title",
@@ -58,4 +58,21 @@ class BookForm(FlaskForm):
                                  validators=[DataRequired()])
     stock = IntegerField("Stock", 
                          validators=[DataRequired()])
-    image = FileField("Book cover", validators=[FileAllowed(["jpg","png"])])       
+    image = FileField("Book cover", validators=[FileAllowed(["jpg","png"])])
+
+class RequestResetForm(FlaskForm):
+    email = StringField("Email",
+                        validators = [DataRequired(),Email()])
+    submit = SubmitField("Request Password Reset")
+
+    def validate_email(self,email):
+        user = User.query.filter_by(email = email.data).first()
+        if user is None:
+            raise ValidationError("There is no account with that email! You must register first")
+    
+class ResetPasswordForm(FlaskForm):
+    password = PasswordField("Password", 
+                             validators=[DataRequired()])
+    confirm_password = PasswordField("Confrim Password", 
+                                     validators=[DataRequired(), EqualTo("password")])
+    submit= SubmitField("Reset Password")
