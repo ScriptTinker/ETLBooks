@@ -26,6 +26,8 @@ with app.app_context():
     #Cleaning Data!
     books = Book.query.distinct(Book.name).all()
     books_data = [book.__dict__ for book in books]
+    for book in books_data:
+        book.pop('_sa_instance_state')
     #Cleaning Data!
 
     """
@@ -33,8 +35,6 @@ with app.app_context():
     was somewhat hard to filter in pandas....
 
     """
-    print(books,books_data)
-
     if not books_data:
         dash_composition.layout= html.Div(
         children=[

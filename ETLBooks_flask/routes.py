@@ -1,6 +1,6 @@
 from flask import render_template,url_for,flash,redirect,request,jsonify, session
 from ETLBooks_flask.models import User,Book,Progress
-from ETLBooks_flask.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
+from ETLBooks_flask.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BookForm
 from ETLBooks_flask import app,db,bycrypt,mail
 from flask_mail import Message
 from flask_login import login_user,current_user,logout_user,login_required
@@ -49,10 +49,6 @@ This is just a demo to implement a logging system with certain roles where the a
 access all the features while operators could only add books,remove etc...
 There is a version without logging for easier access
 The email and password for the main admin would be admin@test.com and admin respectively
-
-REMEMBER THAT YOU JUST REWRITE THE CODE TO DEBUG IT 
-YOU REMOVED LOGINGS,TEMPLATES AND MUST ADD A WAY TO UPDATE THE IFRAMES OF THE DATA IN A DYNAMIC WAY!!!!
-YOU MUST LEARN JS YOU FUCKING IDIOT
 """
 
 @app.route("/logout")
@@ -140,7 +136,8 @@ def books():
 
 @app.route("/book/new")
 def new_book():
-    pass
+    form = BookForm()
+    return render_template("new_book.html",form=form, title= "Add Book")
 
 @app.route("/book/delete")
 def delete_book():

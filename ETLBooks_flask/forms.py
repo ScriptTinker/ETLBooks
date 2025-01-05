@@ -60,6 +60,8 @@ class BookForm(FlaskForm):
                          validators=[DataRequired()])
     image = FileField("Book cover", validators=[FileAllowed(["jpg","png"])])
 
+    submit= SubmitField("Add Book")
+
 class RequestResetForm(FlaskForm):
     email = StringField("Email",
                         validators = [DataRequired(),Email()])
