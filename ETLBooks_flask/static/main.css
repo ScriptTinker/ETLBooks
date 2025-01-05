@@ -101,7 +101,12 @@ body {
   .sidebar{
     display: none;
   }
-}
+
   .sm-dropdown{
     display: block;
   }
+
+  .edit_profile_frame{
+    margin-top: 20px;
+  }
+}  

@@ -51,7 +51,7 @@
                     {{form.remember(class="form-check-input me-2", type="checkbox", value="", id="formRemember")}}
                     {{form.remember.label(class="form-check-label", for="formRemember")}} 
                   </div>
-                  <a href="#!" class="text-body">Forgot password?</a>
+                  <a href="{{url_for('reset_request')}}" class="text-body">Forgot password?</a>
                 </div>
                 <!-- Submit -->
                 <div class="text-center text-lg-start mt-4 pt-2">

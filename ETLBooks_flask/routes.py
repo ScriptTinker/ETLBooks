@@ -1,7 +1,8 @@
 from flask import render_template,url_for,flash,redirect,request,jsonify, session
 from ETLBooks_flask.models import User,Book,Progress
 from ETLBooks_flask.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm
-from ETLBooks_flask import app,db,bycrypt
+from ETLBooks_flask import app,db,bycrypt,mail
+from flask_mail import Message
 from flask_login import login_user,current_user,logout_user,login_required
 from web_scraper import web_scraper
 from book_counter import book_counter
@@ -72,7 +73,7 @@ def home():
 def scraper():
     return render_template("scraper.html")
 
-@app.route("/scraper/prepare_scraper")
+@app.route("/scraper/prepare_scraper", methods=["POST","GET"])
 def prepare_scraper():
     #user_id = current_user.id
     total_books = book_counter()
@@ -154,8 +155,17 @@ def pie_chart():
     return render_template("pie_chart.html", title = "Book Composition")
 
 def send_reset_email(user):
-    pass
-
+    token = user.get_reset_token()
+    msg = Message("Password Reset Request", 
+                  sender="noreply@demo.com",
+                  recipients=[user.email])
+    msg.body=f'''
+To reset your password, visit the following link:
+{url_for("reset_token", token=token, _external=True)}
+If you feel like this is a mistake, just ignore this email!
+'''
+    mail.send(msg)
+    
 @app.route("/reset_password", methods=["GET","POST"])
 def reset_request():
     if current_user.is_authenticated:
@@ -176,4 +186,8 @@ def reset_password(token):
         flash("That is an invalid or expired token!", "warning")
         return redirect(url_for('reset_request'))
     form = ResetPasswordForm
+    if form.validate_on_submit():
+        hashed_password = bycrypt.generate_password_hash(form.password.data).decode("UTF-8")
+        user.password = hashed_password
+        db.session.commit()
     return render_template('reset_password.html', title = "Reset Password", form = form)
