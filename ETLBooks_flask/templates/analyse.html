@@ -1,8 +1,8 @@
 {% extends "layout3.html" %}
 {% block content %}
 <div class="container">
-  <div class="row">
-    <div class="col-md-5 d-flex mr-2">
+  <div class="row justify-content-center">
+    <div class="col-md-5 mr-2 flex-column">
       <div class="card" style="width: 18rem;">
           <img class="card-img-top" src="data:image/png;base64,{{ composition_thumbnail }}" alt="No Image found!">
           <div class="card-body">
@@ -12,7 +12,7 @@
           </div>
       </div>    
     </div>
-    <div class="col-md-5 d-flex">
+    <div class="col-md-5 flex-column">
       <div class="card" style="width: 18rem;">
           <img class="card-img-top" src="data:image/png;base64,{{ composition_thumbnail }}" alt="Card image cap">
           <div class="card-body">
@@ -23,8 +23,8 @@
       </div>    
     </div>
   </div>
-  <div class="row mt-4">
-    <div class="col-md-5 d-flex">
+  <div class="row justify-content-center">
+    <div class="col-md-5 flex-column mr-2">
       <div class="card" style="width: 18rem;">
           <img class="card-img-top" src="data:image/png;base64,{{ composition_thumbnail }}" alt="Card image cap">
           <div class="card-body">
@@ -34,7 +34,7 @@
           </div>
       </div>    
     </div>
-    <div class="col-md-5 d-flex ml-2">
+    <div class="col-md-5 flex-column">
       <div class="card" style="width: 18rem;">
           <img class="card-img-top" src="data:image/png;base64,{{ composition_thumbnail }}" alt="Card image cap">
           <div class="card-body">

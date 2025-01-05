@@ -94,6 +94,9 @@ body {
     display: none;
   }
   
+  .edit_profile_frame{
+    display: none;
+  }
 @media (max-width:768px){
   .sidebar{
     display: none;

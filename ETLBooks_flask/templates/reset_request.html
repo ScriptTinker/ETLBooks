@@ -1,9 +1,10 @@
 {% extends "layout2.html" %}
 
 {% block content %}
+<link rel="stylesheet" href="{{url_for('static', filename='login.css')}}" type="text/css">
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
+        <div class="col-md-9">
             <div class="card shadow-lg">
                 <div class="card-header d-flex align-items-center bg-steel">
                 </div>
@@ -13,13 +14,22 @@
                             <img src="{{url_for('static', filename='Logo.png')}}" alt="Password Reset Image" class="img-fluid rounded-circle">
                         </div>
                         <div class="col-md-6">
-                            <form action="/send-reset-link" method="POST">
-                                <div class="mb-3">
+                            <form action="" method="post">
+                                <div class="form-group">
                                     {{ form.email.lable}}
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter your email" required>
+                                    {% if form.email.errors %}
+                                    <div class="invalid-feedback">
+                                      {% for error in form.email.errors %}
+                                          <span>{{error}} </span>
+                                      {% endfor %}
+                                    </div>
+                                      {{form.email(class="form-control-label is-invalid")}}
+                                  {% else %}    
+                                      {{form.email(class="form-control", type="email", id="formEmail",placeholder="Enter your email")}}    
+                                  {% endif %}
                                 </div>
-                                <div class="d-grid gap-2">
-                                    <button type="submit" class="btn btn-primary">Send Reset Link</button>
+                                <div class="form-group">
+                                    {{ form.submit(class="btn btn-primary") }}
                                 </div>
                             </form>
                         </div>

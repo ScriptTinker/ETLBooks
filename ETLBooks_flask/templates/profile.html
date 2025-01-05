@@ -11,9 +11,8 @@
                     <h4 class="card-title">{{current_user.name}}</h4>
                     <p class="card-text text-muted">{{current_user.email}}</p>
                     <div class="btn-group-vertical w-100">
-                        <button type="button" class="btn btn-outline-primary">Request Admin Role</button>
-                        <button type="button" class="btn btn-outline-secondary">Edit Profile</button>
-                        <button type="button" class="btn btn-outline-warning">Change Password</button>
+                        <button type="button" class="btn btn-outline-primary" id="req_adm_btn">Request Admin Role</button>
+                        <button type="button" class="btn btn-outline-secondary" id="edit_profile_btn">Edit Profile</button>
                     </div>
                 </div>
             </div>
@@ -23,9 +22,9 @@
         <div class="col-md-9">
             <!-- Section: Edit Profile -->
             <div class="card shadow-sm mb-4">
-                <div class="card-body">
+                <div class="card-body edit_profile_frame" id="edit_profile_frame">
                     <h4 class="card-title mb-3">Edit Profile</h4>
-                    <form>
+                    <form method="post" action="">
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="mb-3">
@@ -35,7 +34,7 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="mb-3">
-                                    <label for="lastName" class="form-label">Last Name</label>
+                                    {{ form.name.lable}}
                                     <input type="text" class="form-control" id="lastName" value="Doe">
                                 </div>
                             </div>
@@ -81,4 +80,6 @@
         </div>
     </div>
 </div>
+
+<script src="{{url_for('static', filename='JS/profile.js')}}"></script>
 {% endblock %}
