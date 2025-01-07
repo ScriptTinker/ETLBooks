@@ -14,7 +14,10 @@ with app.app_context():
         thumbnail = base64.b64encode(bytes).decode("utf-8")
         return thumbnail
     
-    dash_composition = dash.Dash(__name__, server=app, url_base_pathname='/dash/pie_chart/')
+    def graph_noData(dash_app):
+        pass
+
+    dash_composition = dash.Dash(name="Dash Composition", server=app, url_base_pathname='/dash/pie_chart/')
 
     """
     The first Graph rappresents the composition of each category 
@@ -24,10 +27,8 @@ with app.app_context():
     """
     
     #Cleaning Data!
-    books = Book.query.distinct(Book.name).all()
-    books_data = [book.__dict__ for book in books]
-    for book in books_data:
-        book.pop('_sa_instance_state')
+    book_composition = Book.query.distinct(Book.name).all()
+    book_composition_data = [book.__dict__ for book in book_composition]
     #Cleaning Data!
 
     """
@@ -35,7 +36,7 @@ with app.app_context():
     was somewhat hard to filter in pandas....
 
     """
-    if not books_data:
+    if not book_composition_data:
         dash_composition.layout= html.Div(
         children=[
             html.H2("There seems to be no data available...", style={"color":"red"}),
@@ -45,7 +46,7 @@ with app.app_context():
 
         composition_thumbnail = None
     else:
-        df_composition = pd.DataFrame(books_data)
+        df_composition = pd.DataFrame(book_composition_data)
 
         try:
             category_counts = df_composition["category"].value_counts().reset_index()
@@ -79,4 +80,12 @@ with app.app_context():
             composition_thumbnail = graph_thumbnail(fig_composition)
 
         except Exception as e:
-            print(e)    
+            print(e)
+
+    dash_avg_price = dash.Dash(name="Avarage Price per category", server=app, url_base_pathname="/dash/avg_price/")
+
+    #Cleaning Data!
+    book_avg_price = Book.query.all()
+    book_avg_price_data = [book.__dict__ for book in book_avg_price]
+    #Cleaning Data!
+

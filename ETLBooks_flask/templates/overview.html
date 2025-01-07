@@ -12,11 +12,11 @@
         <article class="media content-section">
             <div class="media-body">
                 <div class="article-metadata">
-                    <a class="mr-2" href="#">{{ book.name }}</a>
+                    <a class="mr-2" href="{{url_for('book', book_id=book.id)}}">{{ book.name }}</a>
                     <small class="text-muted">{{ book.date_extracted }}</small>
                 </div>
-                <h2><a class="article-title" href="#">{{ book.title }}</a></h2>
-                <p class="article-content">{{ book.content }}</p>
+                <h2><a class="article-title" href="#">{{ book.category }}</a></h2>
+                <p class="article-content">{{ book.stock }}</p>
             </div>
         </article>
     {% endfor %}

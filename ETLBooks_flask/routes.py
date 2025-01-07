@@ -131,17 +131,61 @@ def overview():
     return render_template("overview.html", title= "Overview", page = page, books=books)
 
 @app.route("/book/<int:book_id>")
-def books():
-    pass
+def book(book_id):
+    book = Book.query.get_or_404(book_id)
+    return render_template('book.html', book = book)
 
-@app.route("/book/new")
+@app.route("/book/new", methods=["POST","GET"])
 def new_book():
     form = BookForm()
-    return render_template("new_book.html",form=form, title= "Add Book")
+    if form.validate_on_submit():
+        flash("The book was added with success!","success")
+        new_book = Book(name = form.title.data,price=form.price.data,review=form.review.data, 
+                        category = form.category.data, availability = form.availability.data,
+                        stock = form.stock.data, image = form.image.data )
+        db.session.add(new_book)
+        db.session.commit()
+        return redirect(url_for("overview"))
 
-@app.route("/book/delete")
-def delete_book():
-    pass
+    return render_template("new_book.html",form=form,
+                            title= "Add Book", legend="Add a new book")
+
+@app.route("/book/update/<int:book_id>")
+def update_book(post_id):
+    book = Book.query.get_or_404(post_id)
+    form = BookForm()
+
+    if form.validate_on_submit():
+        #Update Book!
+        book.name = form.name.data
+        book.price = form.price.data
+        book.review = form.review.data
+        book.category = form.category.data
+        book.availability = form.availability.data
+        book.stock = form.stock.data
+        book.image = form.image.data
+        #Update Book!
+        db.session.commit()
+        flash(f"{book.name} was updated!")
+        return redirect(url_for("book", book_id=book.id))
+    elif request.method== "GET":
+        #Populate update Form!
+        form.name.data = book.name
+        form.price.data = book.price
+        form.review.data = book.review
+        form.category.data = book.category
+        form.availability.data = book.availability
+        form.stock.data = book.stock
+        form.image.data = book.image
+        #Populate update Form!
+
+    return render_template("new_book", title = "Update Book",
+                           form=form , book=book, legend = "Update Post")
+
+@app.route("/book/delete/<int:book_id>")
+def delete_book(post_id):
+    book = Book.query.get_or_404(post_id)
+
 
 @app.route("/analyse")
 def analyse():
