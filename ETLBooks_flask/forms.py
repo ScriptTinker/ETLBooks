@@ -55,14 +55,22 @@ class BookForm(FlaskForm):
     category = StringField("Category",
                             validators=[DataRequired(),Length(min=1,max=255)])
     availability = BooleanField("Available?",
-                                 validators=[DataRequired()])
+                                 validators=[])
     stock = IntegerField("Stock", 
-                         validators=[DataRequired()])
+                         validators=[])
     image = FileField("Book cover", validators=[FileAllowed(["jpg","png"])])
 
     submit= SubmitField("Add Book")
 
-class RequestResetForm(FlaskForm):
+    def validate_stock(self, field):
+        if self.stock.data < 0:
+            raise ValidationError("The stock must be greater than zero!")
+        if self.stock.data == 0 and self.availability.data == True:
+            raise ValidationError("The book must be available if there is stock!")
+        if self.stock.data > 0 and self.availability.data == False:
+            raise ValidationError("The book must be unavailable if there is no stock!")
+        
+class RequestResetForm(FlaskForm):  
     email = StringField("Email",
                         validators = [DataRequired(),Email()])
     submit = SubmitField("Request Password Reset")

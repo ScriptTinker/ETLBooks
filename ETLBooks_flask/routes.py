@@ -128,7 +128,7 @@ def cancel_scraping():
 @app.route("/overview")
 def overview():
     page = request.args.get("page", type=int)
-    books = Book.query.paginate(page=page,per_page=10)
+    books = Book.query.paginate(page=page,per_page=7)
     return render_template("overview.html", title= "Overview", page = page, books=books)
 
 @app.route('/image/<int:book_id>')
@@ -240,7 +240,7 @@ def reset_password(token):
     if user is None:
         flash("That is an invalid or expired token!", "warning")
         return redirect(url_for('reset_request'))
-    form = ResetPasswordForm
+    form = ResetPasswordForm()
     if form.validate_on_submit():
         hashed_password = bycrypt.generate_password_hash(form.password.data).decode("UTF-8")
         user.password = hashed_password
