@@ -97,6 +97,15 @@ body {
   .edit_profile_frame{
     display: none;
   }
+
+  .home_buttons{
+    margin-top: 70px;
+  }
+
+  .crud_buttons{
+    display: none;
+  }
+
 @media (max-width:768px){
   .sidebar{
     display: none;
@@ -109,4 +118,10 @@ body {
   .edit_profile_frame{
     margin-top: 20px;
   }
-}  
+
+ .crud_buttons{
+    display: block;
+    text-align: center;
+    margin-top: 35px;
+  }
+}    

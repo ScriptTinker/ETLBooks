@@ -176,7 +176,7 @@ def update_book(book_id):
         book.image = form.image.data
         #Update Book!
         db.session.commit()
-        flash(f"{book.name} was updated!")
+        flash(f"{book.name} was updated!", "info")
         return redirect(url_for("book", book_id=book.id))
     elif request.method== "GET":
         #Populate update Form!

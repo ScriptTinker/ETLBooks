@@ -29,7 +29,7 @@
                   <!-- Navbar Right Side -->
                   <div class="navbar-nav">
                     {% if current_user.is_authenticated %}
-                  <a class="nav-item nav-link d-md-none" href="{{url_for('scraper')}}">Web Scraper</a>
+                    <a class="nav-item nav-link d-md-none" href="{{url_for('scraper')}}">Web Scraper</a>
                     <a class="nav-item nav-link d-md-none" href="{{url_for('analyse')}}">Analyse</a>
                     <a class="nav-item nav-link d-md-none" href="{{url_for('overview')}}">Overview</a>
                     <a class="nav-item nav-link" href="{{url_for('logout')}}">Log out</a>
@@ -57,7 +57,7 @@
               </div>
               <div class="col-md-3 sidebar ">
                 <div class="content-section">
-                  <h3>Quick access</h3>
+                  <h3 class="text-center">Quick access</h3>
                   <p>
                     <ul class="list-group">
                       <li class="list-group-item list-group-item-light">
