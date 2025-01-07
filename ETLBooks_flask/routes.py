@@ -1,7 +1,8 @@
-from flask import render_template,url_for,flash,redirect,request,jsonify, session
+from flask import render_template,url_for,flash,redirect,request,jsonify, session, send_file
 from ETLBooks_flask.models import User,Book,Progress
 from ETLBooks_flask.forms import RegistrationForm, LoginForm, UpdateAccountForm, RequestResetForm, ResetPasswordForm, BookForm
 from ETLBooks_flask import app,db,bycrypt,mail
+from io import BytesIO
 from flask_mail import Message
 from flask_login import login_user,current_user,logout_user,login_required
 from web_scraper import web_scraper
@@ -130,6 +131,15 @@ def overview():
     books = Book.query.paginate(page=page,per_page=10)
     return render_template("overview.html", title= "Overview", page = page, books=books)
 
+@app.route('/image/<int:book_id>')
+def get_image(book_id):
+    book = Book.query.filter_by(id=book_id).first()
+    if book and book.image:
+        image_data = book.image
+        return send_file(BytesIO(image_data), mimetype='image/png')
+    else:
+        return 'Image not found', 404
+
 @app.route("/book/<int:book_id>")
 def book(book_id):
     book = Book.query.get_or_404(book_id)
@@ -150,14 +160,14 @@ def new_book():
     return render_template("new_book.html",form=form,
                             title= "Add Book", legend="Add a new book")
 
-@app.route("/book/update/<int:book_id>")
-def update_book(post_id):
-    book = Book.query.get_or_404(post_id)
+@app.route("/book/update/<int:book_id>", methods=["GET","POST"])
+def update_book(book_id):
+    book = Book.query.get_or_404(book_id)
     form = BookForm()
 
     if form.validate_on_submit():
         #Update Book!
-        book.name = form.name.data
+        book.name = form.title.data
         book.price = form.price.data
         book.review = form.review.data
         book.category = form.category.data
@@ -170,7 +180,7 @@ def update_book(post_id):
         return redirect(url_for("book", book_id=book.id))
     elif request.method== "GET":
         #Populate update Form!
-        form.name.data = book.name
+        form.title.data = book.name
         form.price.data = book.price
         form.review.data = book.review
         form.category.data = book.category
@@ -179,12 +189,16 @@ def update_book(post_id):
         form.image.data = book.image
         #Populate update Form!
 
-    return render_template("new_book", title = "Update Book",
-                           form=form , book=book, legend = "Update Post")
+    return render_template("new_book.html", title = "Update Book",
+                           form=form , book=book, legend = "Update Book")
 
-@app.route("/book/delete/<int:book_id>")
-def delete_book(post_id):
-    book = Book.query.get_or_404(post_id)
+@app.route("/book/delete/<int:book_id>", methods=["GET","POST"])
+def delete_book(book_id):
+    book = Book.query.get_or_404(book_id)
+    flash(f"{book.name} was deleted!","warning")
+    db.session.delete(book)
+    db.session.commit()
+    return redirect(url_for("overview"))
 
 
 @app.route("/analyse")

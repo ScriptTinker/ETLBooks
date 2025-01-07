@@ -1,31 +1,75 @@
 {% extends "layout3.html" %}
 
 {% block content %}
-    <!-- Check if there are no books, display scrape button -->
-    {% if books.items|length == 0 %}
-        <a href="{{ url_for('scraper') }}"><button id="scrape-btn" class="btn btn-primary mb-3 mt-2">Start Scraping</button></a>
-        <span class="d-flex mr-auto"> Oh no! It's seems that there are no books at the moment!</span>
-        <p>Click on Start Scrape to access the scraper to begain analysing the data!</p>
-    {% endif %}
+<!-- Check if there are no books, display scrape button -->
+{% if books.items|length == 0 %}
+<a href="{{ url_for('scraper') }}"><button id="scrape-btn" class="btn btn-primary mb-3 mt-2">Start Scraping</button></a>
+<span class="d-flex mr-auto"> Oh no! It's seems that there are no books at the moment!</span>
+<p>Click on Start Scrape to access the scraper to begain analysing the data!</p>
+{% endif %}
 
-    {% for book in books.items %}
-        <article class="media content-section">
-            <div class="media-body">
-                <div class="article-metadata">
-                    <a class="mr-2" href="{{url_for('book', book_id=book.id)}}">{{ book.name }}</a>
-                    <small class="text-muted">{{ book.date_extracted }}</small>
+{% for book in books.items %}
+<a href="{{url_for('book', book_id=book.id)}}">
+    <div class="card shadow-lg">
+        <div class="card-header d-flex align-items-center bg-steel">
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 text-center">
+                    <img src="{{url_for('get_image', book_id=book.id)}}" alt="Image nof found!"
+                        class="img-fluid rounded-circle">
                 </div>
-                <h2><a class="article-title" href="#">{{ book.category }}</a></h2>
-                <p class="article-content">{{ book.stock }}</p>
+                <div class="col-md-6">
+                    <div class="">
+                        <h3>Title:{{book.name}}</h3>
+                        <h3>Category:{{book.category}}</h3>
+                    </div>
+                    <div class="">
+                        <h6>Stock: {{book.stock}}</h6>
+                    </div>
+                </div>
             </div>
-        </article>
-    {% endfor %}
+        </div>
+    </div>
+</a>
+{% endfor %}
 
-    {% for page_num in books.iter_pages() %}
-        {% if page_num %}
-            <a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num)}}">{{page_num}}</a>
-        {% else %}
-            ...
-        {% endif %}
-    {% endfor %}
+{% for page_num in books.iter_pages() %}
+{% if page_num %}
+<a class="btn btn-outline-info mb-4" href="{{ url_for('home', page=page_num)}}">{{page_num}}</a>
+{% else %}
+...
+{% endif %}
+{% endfor %}
 {% endblock content %}
+
+{% block addonSidebar %}
+<div class="card shadow-lg">
+    <div class="card-header bg-steel rounded-lg">
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col">
+                <ul class="list-group">
+                    <li class="list-group-item list-group-item-success">
+                        <a href="{{url_for('new_book')}}">
+                            <button class="btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                    class="bi bi-journal-plus" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd"
+                                        d="M8 5.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V10a.5.5 0 0 1-1 0V8.5H6a.5.5 0 0 1 0-1h1.5V6a.5.5 0 0 1 .5-.5" />
+                                    <path
+                                        d="M3 0h10a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2v-1h1v1a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H3a1 1 0 0 0-1 1v1H1V2a2 2 0 0 1 2-2" />
+                                    <path
+                                        d="M1 5v-.5a.5.5 0 0 1 1 0V5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0V8h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1zm0 3v-.5a.5.5 0 0 1 1 0v.5h.5a.5.5 0 0 1 0 1h-2a.5.5 0 0 1 0-1z" />
+                                </svg>
+                                Add Book
+                            </button>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock addonSidebar %}
