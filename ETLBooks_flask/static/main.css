@@ -106,6 +106,10 @@ body {
     display: none;
   }
 
+  .add_book{
+    display: none;
+  }
+
 @media (max-width:768px){
   .sidebar{
     display: none;
@@ -124,4 +128,12 @@ body {
     text-align: center;
     margin-top: 35px;
   }
-}    
+  .add_book{
+    display: block;
+    margin-top: 10px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+  }
+}
+
