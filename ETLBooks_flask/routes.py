@@ -7,7 +7,7 @@ from flask_mail import Message
 from flask_login import login_user,current_user,logout_user,login_required
 from web_scraper import web_scraper
 from book_counter import book_counter
-from plotly_graphs import composition_thumbnail
+from plotly_graphs import composition_thumbnail, avg_price_per_category_thumbnail
 
 
 @app.route("/", methods = ["GET", "POST"])
@@ -203,7 +203,8 @@ def delete_book(book_id):
 
 @app.route("/analyse")
 def analyse():
-    return render_template("analyse.html", title="Data Analysis",composition_thumbnail=composition_thumbnail)
+    return render_template("analyse.html", title="Data Analysis",composition_thumbnail=composition_thumbnail, 
+                           avg_price_per_category_thumbnail=avg_price_per_category_thumbnail)
 
 @app.route("/analyse/pie_chart")
 def pie_chart():

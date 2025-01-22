@@ -5,9 +5,16 @@
         <div class="row">
             <div class="embed-responsive embed-responsive-1by1 col-md-6">
                 <iframe src="{{url_for('/dash/pie_chart/')}}" class="embed-responsive-item border border-info rounded" ></iframe>
-            </div>
+            </div>    
             <div class="col-4 ml-3">
                 <p>{{ composition_comment }}</p>
+                <div class="justify-content-center">
+                    <a href="{{url_for('/dash/pie_chart/')}}">
+                        <button class="btn btn-primary">
+                            Go fullscreen
+                        </button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>
