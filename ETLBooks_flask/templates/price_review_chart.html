@@ -1,0 +1,21 @@
+{% extends "layout2.html" %}
+{% block content %}
+    <h1>Book Category Composition</h1>
+     <div class="container justify-content">
+        <div class="row">
+            <div class="embed-responsive embed-responsive-1by1 col-md-6">
+                <iframe src="{{url_for('/dash/price_review_chart/')}}" class="embed-responsive-item border border-info rounded" ></iframe>
+            </div>    
+            <div class="col-4 ml-3">
+                <p>{{ composition_comment }}</p>
+                <div class="justify-content-center">
+                    <a href="{{url_for('/dash/price_review_chart/')}}">
+                        <button class="btn btn-primary">
+                            Go fullscreen
+                        </button>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %} 

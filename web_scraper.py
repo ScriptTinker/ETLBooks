@@ -50,7 +50,7 @@ def web_scraper():
         """
         for category in categories:  
             try:
-                url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(" ", "-")}_{i}/index.html"
+                url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(' ','-')}_{i}/index.html"
                 response = requests.get(url)
                 if response.status_code != 200:
                     response=retry_scrape(url)
@@ -108,7 +108,7 @@ def web_scraper():
                         return
 
                 while checkPagination(url):
-                    url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(" ", "-")}_{i}/page-{pagecount}.html"
+                    url = f"https://books.toscrape.com/catalogue/category/books/{category.lower().replace(' ', '-')}_{i}/page-{pagecount}.html"
                     response = requests.get(url)
                     if response.status_code != 200:
                         response=retry_scrape(url)

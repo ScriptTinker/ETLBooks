@@ -15,12 +15,12 @@
     </div>
     <div class="col-md-5 flex-column">
       <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="data:image/png;base64,{{ composition_thumbnail }}" alt="Card image cap">
+          <img class="card-img-top" src="data:image/png;base64,{{ avg_price_per_category_thumbnail }}" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title">Avarage price per category</h5>
             <p class="card-text">This graph rappresents the correlation between the avarage price of each category,
                to see the most expensive.</p>
-            <a href="#" class="btn btn-primary">See more!</a>
+            <a href="{{url_for('avg_price_chart')}}" class="btn btn-primary">See more!</a>
           </div>
       </div>    
     </div>
@@ -28,12 +28,12 @@
   <div class="row justify-content-center">
     <div class="col-md-5 flex-column mr-2">
       <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="data:image/png;base64,{{ avg_price_per_category_thumbnail }}" alt="Card image cap">
+          <img class="card-img-top" src="data:image/png;base64,{{ price_review_thumbnail }}" alt="Card image cap">
           <div class="card-body">
             <h5 class="card-title">Review vs price</h5>
             <p class="card-text">This graph takes into consideraiton the reviews of individual books, 
               filter by extraction date.</p>
-            <a href="#" class="btn btn-primary">See more!</a>
+            <a href="{{url_for('price_review')}}" class="btn btn-primary">See more!</a>
           </div>
       </div>    
     </div>

@@ -38,6 +38,7 @@ Flask-Bcrypt==1.0.1
 Flask-Login==0.6.3
 Flask-SQLAlchemy==3.1.1
 Flask-WTF==1.2.2
+flask_mail==0.10.0
 flatbuffers==24.12.23
 fonttools==4.55.3
 fqdn==1.5.1
@@ -156,7 +157,7 @@ tf_keras==2.18.0
 threadpoolctl==3.5.0
 tinycss2==1.4.0
 tokenizers==0.21.0
-torch==2.5.1+cpu
+torch==2.5.1
 tornado==6.4.2
 tqdm==4.67.1
 traitlets==5.14.3
