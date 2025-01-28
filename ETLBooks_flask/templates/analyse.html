@@ -28,22 +28,22 @@
   <div class="row justify-content-center">
     <div class="col-md-5 flex-column mr-2">
       <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="data:image/png;base64,{{ price_review_thumbnail }}" alt="Card image cap">
+          <img class="card-img-top" src="data:image/png;base64,{{avg_review_per_category_thumbnail}}" alt="Card image cap">
           <div class="card-body">
-            <h5 class="card-title">Review vs price</h5>
-            <p class="card-text">This graph takes into consideraiton the reviews of individual books, 
-              filter by extraction date.</p>
-            <a href="{{url_for('price_review')}}" class="btn btn-primary">See more!</a>
+            <h5 class="card-title">Card title</h5>
+            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            <a href="{{url_for('avg_review_chart')}}" class="btn btn-primary">See more!</a>
           </div>
       </div>    
     </div>
     <div class="col-md-5 flex-column">
       <div class="card" style="width: 18rem;">
-          <img class="card-img-top" src="data:image/png;base64,{{ composition_thumbnail }}" alt="Card image cap">
+          <img class="card-img-top" src="data:image/png;base64,{{ price_review_thumbnail }}" alt="Card image cap">
           <div class="card-body">
-            <h5 class="card-title">Card title</h5>
-            <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            <a href="#" class="btn btn-primary">See more!</a>
+            <h5 class="card-title">Review vs price</h5>
+            <p class="card-text">This graph takes into consideraiton the reviews of individual books, 
+              filter by extraction date.</p>
+            <a href="{{url_for('price_review_chart')}}" class="btn btn-primary">See more!</a>
           </div>
       </div>    
     </div>

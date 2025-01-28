@@ -11,6 +11,7 @@ from io import BytesIO
 composition_thumbnail = None
 avg_price_per_category_thumbnail = None
 price_review_thumbnail = None
+avg_review_per_category_thumbnail= None
 
 with app.app_context():
     def graph_thumbnail(graph):
@@ -221,6 +222,56 @@ with app.app_context():
         except Exception as e:
             dash_price_review.layout = create_error_layout(f"Error setting up price-review analysis: {str(e)}")
 
-"""
-Our fourth graph would be a line chart of every
-"""            
+    """
+    Our fourth graph would be an average review per category to see which category dominates in costumer
+    satisfaction
+    """            
+    dash_avg_review = dash.Dash(__name__, server=app, url_base_pathname='/dash/avg_review_chart/')
+
+    try:
+        books_avg_review = Book.query.all()
+        # Extract necessary fields explicitly to avoid SQLAlchemy internal attributes
+        books_avg_review_data = [book.__dict__ for book in books_avg_price]
+    except Exception as e:
+        print(f"Database error: {str(e)}")
+        books_avg_review_data = []
+
+    try:
+        df_avg_review = pd.DataFrame(books_avg_review_data) if books_avg_review_data else pd.DataFrame()
+    except Exception as e:
+        print(f"DataFrame creation error: {str(e)}")
+        df_avg_review = pd.DataFrame()
+
+    if df_avg_review.empty:
+        dash_avg_review.layout = create_error_layout("No data available for review analysis")
+    else:
+        try:
+            review_mapping = {
+                "One": 1, "Two": 2, "Three": 3, 
+                "Four": 4, "Five": 5
+            }
+            df_avg_review['review'] = df_avg_review['review'].replace(review_mapping)
+            df_avg_review['review'] = pd.to_numeric(df_avg_review['review'], errors='coerce')
+            valid_reviews = df_avg_review.dropna(subset=['review'])
+                
+            if valid_reviews.empty:
+                raise ValueError("No valid review data available")
+                    
+            avg_review_per_category = valid_reviews.groupby('category', observed=True)['review'].mean().reset_index()
+            avg_review_per_category.columns = ["Category", "Average review"]
+
+            fig_average_review = px.bar( 
+                avg_review_per_category,
+                x="Category",
+                y="Average review",
+                title="Average review per Category"
+            )
+                
+            dash_avg_review.layout = html.Div([
+                html.H1("Average review by Category"),
+                dcc.Graph(figure=fig_average_review)
+            ])
+            
+            avg_review_per_category_thumbnail = graph_thumbnail(fig_average_review)
+        except Exception as e:
+            dash_avg_review.layout = create_error_layout(f"Error generating review chart: {str(e)}")
