@@ -9,7 +9,7 @@ from web_scraper import web_scraper
 from book_counter import book_counter
 from plotly_graphs import (composition_thumbnail, avg_price_per_category_thumbnail,
                            price_review_thumbnail, avg_review_per_category_thumbnail)
-from AI_commentary import (composition_comment)  
+from AI_commentary import composition_comment  
 
 
 
@@ -51,7 +51,7 @@ def register():
 """
 ^^^^^^^^^^^^^^^^^^^^^^^^
 This is just a demo to implement a logging system with certain roles where the admin can
-access all the features while users could only see the data analyst tab
+access all the features while operators could only add books,remove etc...
 There is a version without logging for easier access
 The email and password for the main admin would be admin@test.com and admin respectively
 """
@@ -215,8 +215,7 @@ def analyse():
 
 @app.route("/analyse/pie_chart")
 def pie_chart():
-    return render_template("pie_chart.html", title = "Book Composition",
-                           composition_comment=composition_comment)
+    return render_template("pie_chart.html", title = "Book Composition")
 
 @app.route("/analyse/avg_price_category")
 def avg_price_chart():
