@@ -9,7 +9,7 @@ from web_scraper import web_scraper
 from book_counter import book_counter
 from plotly_graphs import (composition_thumbnail, avg_price_per_category_thumbnail,
                            price_review_thumbnail, avg_review_per_category_thumbnail)
-from AI_commentary import composition_comment  
+from AI_commentary import (composition_comment)  
 
 
 
