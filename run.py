@@ -3,10 +3,20 @@ import sys
 import os
 
 def install_requirements():
+    # First install Colab-compatible base versions
+    subprocess.check_call([
+        sys.executable, "-m", "pip", "install",
+        "traitlets==4.1.0",
+        "ipython==7.34.0",
+        "jupyter-client==6.1.12",
+        "jupyter-core==4.9.2",
+        "numpy==1.21.6"
+    ])
+    
+    # Then install other requirements
     subprocess.check_call([sys.executable, "-m", "pip", "install", "-r", "requirements_versions.txt"])
 
 def is_colab():
-    """Check if the code is running on Google Colab"""
     try:
         import google.colab
         return True
@@ -23,27 +33,28 @@ if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
 
 if __name__ == "__main__":
     if is_colab():
-        print("Running on Google Colab - Setting up public URL...")
-        # Fix IPython/traitlets version conflict first
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "traitlets==4.1.0"])
+        print("Configuring Colab environment...")
+        # Additional Colab-specific setup
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyngrok==5.0.5"])
         
-        # Install pyngrok for Colab
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "pyngrok"])
+        # Fix IPython display compatibility
+        from IPython.display import clear_output
+        clear_output()
         
         from pyngrok import ngrok
         from threading import Thread
         
-        # Start Flask server in a thread
+        # Configure Flask for Colab
         Thread(target=lambda: app.run(
-            host='0.0.0.0', 
-            port=5000, 
-            debug=True, 
-            use_reloader=False)
-        ).start()
+            host='0.0.0.0',
+            port=5000,
+            debug=False,  # Debug mode can cause issues in Colab
+            use_reloader=False
+        )).start()
         
         # Set up ngrok tunnel
         public_url = ngrok.connect(5000, bind_tls=True).public_url
         print(f"\nPublic URL: {public_url}\n")
     else:
-        # Normal execution for local environment
+        # Local development configuration
         app.run(debug=True, use_reloader=False)
