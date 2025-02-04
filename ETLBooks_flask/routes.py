@@ -131,7 +131,7 @@ def cancel_scraping():
 @app.route("/scraper/update_graphs", methods=["GET","POST"])
 def update_graphs():
     import plotly_graphs
-    return None
+    return jsonify({"success":True})
 
 @app.route("/overview")
 def overview():
