@@ -24,6 +24,9 @@ if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
 if __name__ == "__main__":
     if is_colab():
         print("Running on Google Colab - Setting up public URL...")
+        # Fix IPython/traitlets version conflict first
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "traitlets==4.1.0"])
+        
         # Install pyngrok for Colab
         subprocess.check_call([sys.executable, "-m", "pip", "install", "pyngrok"])
         
