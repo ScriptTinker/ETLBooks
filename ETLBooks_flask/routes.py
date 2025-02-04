@@ -9,7 +9,7 @@ from web_scraper import web_scraper
 from book_counter import book_counter
 from plotly_graphs import (composition_thumbnail, avg_price_per_category_thumbnail,
                            price_review_thumbnail, avg_review_per_category_thumbnail)
-from AI_commentary import composition_comment  
+
 
 
 
@@ -128,6 +128,10 @@ def cancel_scraping():
 
     return jsonify({"success": True})
 
+@app.route("/scraper/update_graphs", methods=["GET","POST"])
+def update_graphs():
+    import plotly_graphs
+    return None
 
 @app.route("/overview")
 def overview():
@@ -212,6 +216,12 @@ def analyse():
                            price_review_thumbnail=price_review_thumbnail, 
                            avg_review_per_category_thumbnail=avg_review_per_category_thumbnail
                           )
+
+@app.route("/analyse/update_comments", methods=["GET","POST"])
+def update_comment():
+    from AI_commentary import generate_composition_comment
+    composition_comment = generate_composition_comment()
+    return jsonify({"success":True})
 
 @app.route("/analyse/pie_chart")
 def pie_chart():

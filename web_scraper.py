@@ -19,7 +19,6 @@ Otherwise retrun false and continue to next category
 """
 def retry_scrape(url):
     for i in range (1,3):
-        flash(f"It seems that the site isn't responding... Trying again(Try:{i}", "warning")
         response = requests.get(url)
         if response.status_code == 200:
             return response

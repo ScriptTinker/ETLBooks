@@ -79,9 +79,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (data.success) {
                     alert('Scraping completed!Return to home to see the books!');
                     clearInterval(progressInterval);
+                    fetch('/scraper/update_graphs', { method: 'POST' });
+                    fetch('/analyse/update_comments', { method: 'POST' });
                     
                 } else {
                     alert('An error occurred during scraping.');
+                    fetch('/scraper/update_graphs', { method: 'POST' });
+                    fetch('/analyse/update_comments', { method: 'POST' });
                 }
 
                 // Re-enable the "Prepare Scraper" button after the process
@@ -106,6 +110,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     resetProgressBar();
                     cancelScraperBtn.style.display = 'none';
                     cancelScraperBtn.disabled= true;
+                    fetch('/scraper/update_graphs', { method: 'POST' });
+                    fetch('/analyse/update_comments', { method: 'POST' });
                     alert('Scraping has been cancelled.');
                 } else {
                     alert('An error occurred while cancelling the scraping.');

@@ -16,3 +16,4 @@ if os.environ.get('WERKZEUG_RUN_MAIN') != 'true':
 
 if __name__ == "__main__":
     app.run(debug=True, use_reloader=False)
+    

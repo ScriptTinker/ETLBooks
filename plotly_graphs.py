@@ -25,6 +25,7 @@ with app.app_context():
                 html.P(message)
             ])    
 
+
     dash_composition = dash.Dash(__name__, server=app, url_base_pathname='/dash/pie_chart/')
 
     #Cleaning Data!

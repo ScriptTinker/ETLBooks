@@ -4,16 +4,18 @@ import logging
 import os
 from plotly_graphs import df_composition
 
-# Suppress TensorFlow oneDNN warnings
+composition_comment=None
+
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
 logging.getLogger("transformers").setLevel(logging.ERROR)
 
+from transformers import pipeline
+
 ai_model = pipeline(
     "text-generation",
     model="HuggingFaceH4/zephyr-7b-beta",
-    device_map="auto"
-)
+    device_map="cpu")
 
 
 def ai_response(prompt):
@@ -30,10 +32,7 @@ def ai_response(prompt):
     
     full_response = response[0]['generated_text'].strip()
     commentary = full_response.split("Commentary:")[-1].split("Commentry:")[-1].strip()
-    
-    # Block URLs in output
-    if "http://" in commentary or "https://" in commentary:
-        return "Invalid commentary generated. Please try again."
+
     return commentary
 
 def generate_composition_comment(df_composition):
