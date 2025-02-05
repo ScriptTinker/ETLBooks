@@ -19,6 +19,9 @@ with app.app_context():
         thumbnail = base64.b64encode(img_bytes).decode("utf-8")
         return thumbnail
     
+    def default_thumbnail():
+        return px.scatter(title="No Data Available")
+    
     def create_error_layout(message):
             return html.Div([
                 html.H1("Error", style={'color': 'red'}),
@@ -43,6 +46,7 @@ with app.app_context():
         
         if df_composition.empty:
             dash_composition.layout = create_error_layout("No data available for category composition")
+            return default_thumbnail()
         else:
             try:
                 if 'category' not in df_composition.columns:
@@ -87,8 +91,7 @@ with app.app_context():
                 dash_composition.layout = create_error_layout(f"Data validation error: {str(ke)}")
             except Exception as e:
                 dash_composition.layout = create_error_layout(f"Error generating composition chart: {str(e)}")
-                
-    composition_thumbnail = graph_thumbnail(generate_composition_graph())            
+                           
 
     """
     The second graph will be a simple bar chart that shows the avarage price of each category
@@ -116,6 +119,7 @@ with app.app_context():
         
         if df_avg_price.empty:
             dash_avg_price.layout = create_error_layout("No data available for price analysis")
+            return default_thumbnail()
         else:
             try:
                 df_avg_price['price'] = pd.to_numeric(df_avg_price['price'], errors='coerce')
@@ -141,8 +145,7 @@ with app.app_context():
                 return fig_average_price
             except Exception as e:
                 dash_avg_price.layout = create_error_layout(f"Error generating price chart: {str(e)}")
-    
-    avg_price_per_category_thumbnail = graph_thumbnail(generate_avg_price_graph())            
+              
         
     """
     Our third graph will be a scatter plot that compares the price of each book with the review
@@ -165,6 +168,7 @@ with app.app_context():
         
         if df_price_review.empty:
             dash_price_review.layout = create_error_layout("No data available for price-review analysis") 
+            return default_thumbnail()
         else:
             try:
                 review_mapping = {
@@ -229,9 +233,7 @@ with app.app_context():
                 # Making a default thumbnail using the lastest extracted date
             except Exception as e:
                 dash_price_review.layout = create_error_layout(f"Error setting up price-review analysis: {str(e)}")
-    
-    price_review_thumbnail = graph_thumbnail(generate_price_review_graph())
-    
+                
     """
     Our fourth graph would be an average review per category to see which category dominates in costumer
     satisfaction
@@ -258,6 +260,7 @@ with app.app_context():
         df_avg_review = cleaning_avg_review_data()
         if df_avg_review.empty:
             dash_avg_review.layout = create_error_layout("No data available for review analysis")
+            return default_thumbnail()
         else:
             try:
                 review_mapping = {
@@ -288,5 +291,11 @@ with app.app_context():
                 return fig_average_review
             except Exception as e:
                 dash_avg_review.layout = create_error_layout(f"Error generating review chart: {str(e)}")
-                
-    avg_review_per_category_thumbnail = graph_thumbnail(generate_avg_review_graph())            
+     
+    try:
+        composition_thumbnail = graph_thumbnail(generate_composition_graph())
+        avg_price_per_category_thumbnail = graph_thumbnail(generate_avg_price_graph())  
+        price_review_thumbnail = graph_thumbnail(generate_price_review_graph())             
+        avg_review_per_category_thumbnail = graph_thumbnail(generate_avg_review_graph())
+    except:
+        print("Error when generating thumbnails!") 

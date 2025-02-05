@@ -59,6 +59,9 @@ Commentary:"""
         return "Failed to generate composition commentary."
 
 def generate_avg_price_comment(df_avg_price):
+    if df_avg_price.empty:
+        return "No valid data available for category composition analysis."
+        
     df_avg_price['price'] = pd.to_numeric(df_avg_price['price'], errors='coerce')
     valid_prices = df_avg_price.dropna(subset=['price'])
                      
@@ -75,7 +78,8 @@ def generate_avg_price_comment(df_avg_price):
     return comment
 
 def generate_price_review_comment(df_price_review):
-    
+    if df_price_review.empty or 'category' not in df_price_review.columns:
+        return "No valid data available for category composition analysis."
     review_mapping = {
             "One": 1, "Two": 2, "Three": 3, 
             "Four": 4, "Five": 5
@@ -94,7 +98,8 @@ def generate_price_review_comment(df_price_review):
     return comment
 
 def generate_avg_review_comment(df_avg_review):
-    
+    if df_avg_review.empty or 'category' not in df_avg_review.columns:
+        return "No valid data available for category composition analysis."    
     review_mapping = {
             "One": 1, "Two": 2, "Three": 3, 
             "Four": 4, "Five": 5
@@ -116,7 +121,10 @@ def generate_avg_review_comment(df_avg_review):
     return comment
 
 with app.app_context():
-    composition_comment = generate_composition_comment(cleaning_composition_data())
-    avg_price_comment= generate_avg_price_comment(cleaning_avg_price_data())
-    price_review_comment = generate_price_review_comment(cleaning_price_review_data())
-    avg_review_comment = generate_avg_review_comment(cleaning_avg_review_data())
+    try:
+        composition_comment = generate_composition_comment(cleaning_composition_data())
+        avg_price_comment= generate_avg_price_comment(cleaning_avg_price_data())
+        price_review_comment = generate_price_review_comment(cleaning_price_review_data())
+        avg_review_comment = generate_avg_review_comment(cleaning_avg_review_data())
+    except:
+        pass    
