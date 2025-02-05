@@ -7,11 +7,16 @@
                 <iframe src="{{url_for('/dash/price_review_chart/')}}" class="embed-responsive-item border border-info rounded" ></iframe>
             </div>    
             <div class="col-4 ml-3">
-                <p>{{ composition_comment }}</p>
+                <p>{{ price_review_comment }}</p>
                 <div class="justify-content-center">
                     <a href="{{url_for('/dash/price_review_chart/')}}">
                         <button class="btn btn-primary">
                             Go fullscreen
+                        </button>
+                    </a>
+                    <a href="{{url_for('update_price_review')}}">
+                        <button class="btn btn-primary">
+                            Refresh
                         </button>
                     </a>
                 </div>

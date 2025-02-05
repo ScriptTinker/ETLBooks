@@ -8,11 +8,10 @@ from flask_login import login_user,current_user,logout_user,login_required
 from web_scraper import web_scraper
 from book_counter import book_counter
 from plotly_graphs import (composition_thumbnail, avg_price_per_category_thumbnail,
-                           price_review_thumbnail, avg_review_per_category_thumbnail)
-
-
-
-
+                           price_review_thumbnail, avg_review_per_category_thumbnail,
+                           )
+from AI_commentary import (composition_comment,avg_price_comment,
+                           price_review_comment,avg_review_comment)
 
 @app.route("/", methods = ["GET", "POST"])
 @app.route("/login", methods = ["GET","POST"])
@@ -128,9 +127,28 @@ def cancel_scraping():
 
     return jsonify({"success": True})
 
-@app.route("/scraper/update_graphs", methods=["GET","POST"])
-def update_graphs():
-    import plotly_graphs
+@app.route('/update_all', methods=['POST'])
+def update_all():
+    from plotly_graphs import (generate_composition_graph,generate_avg_price_graph,
+                               generate_price_review_graph, generate_avg_review_graph,
+                               cleaning_composition_data,cleaning_avg_price_data,
+                               cleaning_price_review_data,cleaning_avg_review_data)
+    
+    generate_composition_graph()
+    generate_avg_price_graph()
+    generate_price_review_graph()
+    generate_avg_review_graph()
+
+    # Regenerate all comments
+    from AI_commentary import (generate_composition_comment,generate_avg_price_comment,
+                               generate_price_review_comment,generate_avg_review_comment)
+    import AI_commentary
+    
+    AI_commentary.composition_comment = generate_composition_comment(cleaning_composition_data())
+    AI_commentary.avg_price_comment = generate_avg_price_comment(cleaning_avg_price_data())
+    AI_commentary.price_review_comment = generate_price_review_comment(cleaning_price_review_data())
+    AI_commentary.avg_review_comment = generate_avg_review_comment(cleaning_avg_review_data())
+
     return jsonify({"success":True})
 
 @app.route("/overview")
@@ -217,27 +235,90 @@ def analyse():
                            avg_review_per_category_thumbnail=avg_review_per_category_thumbnail
                           )
 
-@app.route("/analyse/update_comments", methods=["GET","POST"])
-def update_comment():
-    from AI_commentary import generate_composition_comment
-    composition_comment = generate_composition_comment()
-    return jsonify({"success":True})
-
 @app.route("/analyse/pie_chart")
 def pie_chart():
-    return render_template("pie_chart.html", title = "Book Composition")
+    return render_template("pie_chart.html", title = "Book Composition",
+                           composition_comment=composition_comment)
+
+@app.route("/analyse/update/composition", methods=["GET"])
+def update_composition():
+    from plotly_graphs import generate_composition_graph
+    fig = generate_composition_graph()
+    
+    from plotly_graphs import graph_thumbnail
+    import plotly_graphs
+    plotly_graphs.composition_thumbnail = graph_thumbnail(fig)
+    
+    from AI_commentary import generate_composition_comment, cleaning_composition_data
+    import AI_commentary
+    df = cleaning_composition_data()
+    AI_commentary.composition_comment = generate_composition_comment(df)
+    
+    return redirect(url_for('pie_chart'))
 
 @app.route("/analyse/avg_price_category")
 def avg_price_chart():
-    return render_template("avg_price_chart.html", title = "Avarage Price per Category")
+    return render_template("avg_price_chart.html", title = "Avarage Price per Category",
+                           avg_price_comment=avg_price_comment)
+
+@app.route("/analyse/update/avg_price", methods=["GET"])
+def update_avg_price():
+    from plotly_graphs import generate_avg_price_graph
+    fig = generate_avg_price_graph()
+    
+    from plotly_graphs import graph_thumbnail
+    import plotly_graphs
+    plotly_graphs.avg_price_per_category_thumbnail = graph_thumbnail(fig)
+    
+    from AI_commentary import generate_avg_price_comment, cleaning_avg_price_data
+    import AI_commentary
+    df = cleaning_avg_price_data()
+    AI_commentary.avg_price_comment = generate_avg_price_comment(df)
+    
+    return redirect(url_for('pie_chart'))
 
 @app.route("/analyse/price_review")
 def price_review_chart():
-    return render_template("price_review_chart.html", title = "Review vs Price")
+    return render_template("price_review_chart.html", title = "Review vs Price",
+                           price_review_comment=price_review_comment)
+
+@app.route("/analyse/update/price_review", methods=["GET"])
+def update_price_review():
+    from plotly_graphs import generate_price_review_graph
+    fig = generate_price_review_graph()
+    
+    from plotly_graphs import graph_thumbnail
+    import plotly_graphs
+    plotly_graphs.price_review_thumbnail = graph_thumbnail(fig)
+    
+    from AI_commentary import generate_price_review_comment, cleaning_price_review_data
+    import AI_commentary
+    df = cleaning_price_review_data()
+    AI_commentary.price_review_comment = generate_price_review_comment(df)
+    
+    return redirect(url_for('pie_chart'))
 
 @app.route("/analyse/avg_review_category")
 def avg_review_chart():
-    return render_template("avg_review_chart.html", title = "Avarage Review per Category")
+    return render_template("avg_review_chart.html", title = "Avarage Review per Category",
+                           avg_review_comment=avg_review_comment)
+
+@app.route("/analyse/update/avg_review", methods=["GET"])
+def update_avg_review():
+    from plotly_graphs import generate_avg_review_graph
+    fig = generate_avg_review_graph()
+    
+    from plotly_graphs import graph_thumbnail
+    import plotly_graphs
+    plotly_graphs.avg_review_per_category_thumbnail = graph_thumbnail(fig)
+    
+    # Regenerate the AI comment
+    from AI_commentary import generate_avg_review_comment, cleaning_avg_review_data
+    import AI_commentary
+    df = cleaning_avg_review_data()
+    AI_commentary.avg_review_comment = generate_avg_review_comment(df)
+    
+    return redirect(url_for('pie_chart'))
                 
 def send_reset_email(user):
     token = user.get_reset_token()

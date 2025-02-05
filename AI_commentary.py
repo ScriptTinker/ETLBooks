@@ -1,8 +1,10 @@
+from ETLBooks_flask import app
 import pandas as pd
 from transformers import pipeline
 import logging
 import os
-from plotly_graphs import df_composition, df_avg_price, df_price_review, df_avg_review
+from plotly_graphs import (cleaning_composition_data,cleaning_avg_price_data,
+                           cleaning_price_review_data,cleaning_avg_review_data)
 
 composition_comment=None
 
@@ -15,7 +17,7 @@ from transformers import pipeline
 ai_model = pipeline(
     "text-generation",
     model="HuggingFaceH4/zephyr-7b-beta",
-    device_map="cpu")
+    device_map="auto")
 
 
 def ai_response(prompt):
@@ -56,8 +58,6 @@ Commentary:"""
         print(f"Composition analysis error: {e}")
         return "Failed to generate composition commentary."
 
-composition_comment = generate_composition_comment(df_composition)
-
 def generate_avg_price_comment(df_avg_price):
     df_avg_price['price'] = pd.to_numeric(df_avg_price['price'], errors='coerce')
     valid_prices = df_avg_price.dropna(subset=['price'])
@@ -73,8 +73,6 @@ def generate_avg_price_comment(df_avg_price):
     comment = ai_response(prompt)
     
     return comment
-
-avg_price_comment = generate_avg_price_comment(df_avg_price)
 
 def generate_price_review_comment(df_price_review):
     
@@ -94,8 +92,6 @@ def generate_price_review_comment(df_price_review):
     comment = ai_response(prompt)
     
     return comment
-
-price_review_comment = generate_price_review_comment(df_price_review)
 
 def generate_avg_review_comment(df_avg_review):
     
@@ -119,4 +115,8 @@ def generate_avg_review_comment(df_avg_review):
     
     return comment
 
-avg_review_comment = generate_avg_review_comment(df_avg_review)
+with app.app_context():
+    composition_comment = generate_composition_comment(cleaning_composition_data())
+    avg_price_comment= generate_avg_price_comment(cleaning_avg_price_data())
+    price_review_comment = generate_price_review_comment(cleaning_price_review_data())
+    avg_review_comment = generate_avg_review_comment(cleaning_avg_review_data())
