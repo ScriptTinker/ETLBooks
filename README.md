@@ -8,11 +8,16 @@ This projects requires a Nvidia GPU to run! However here's a way to test it with
 
 Here's a guide on how to use google colab:
 
-1. Click on the link above
-2. Click on the arrow with white background close to the code cell:
-   ![App Screenshot](colab/images/tutorial_img_1.png)
-3. Once the runtime has been initilized click on the blue link that lets you visualize the web app:
-   ![App Screenshot](colab/images/tutorial_img_2.png)
+## 1. Click on the link above
+
+## 2. Click on the arrow with white background close to the code cell:
+
+![App Screenshot](colab/images/tutorial_img_1.png)
+
+## 3. Once the runtime has been initilized click on the blue link that lets you visualize the web app:
+
+   <img src="colab/images/tutorial_img_2.png" width="400" height="300" alt="Description">
    The link may differ from this example...
-4. Wait until the AI model is downloaded! Once the process is complete avoid the red link, that's for local instance only!
+   
+## 4. Wait until the AI model is downloaded! Once the process is complete avoid the red link, that's for local instance only!
    You may need to refresh the page if you click on the link early on...
