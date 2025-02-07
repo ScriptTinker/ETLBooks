@@ -10,8 +10,7 @@ from book_counter import book_counter
 from plotly_graphs import (composition_thumbnail, avg_price_per_category_thumbnail,
                            price_review_thumbnail, avg_review_per_category_thumbnail,
                            )
-from AI_commentary import (composition_comment,avg_price_comment,
-                           price_review_comment,avg_review_comment)
+import AI_commentary
 
 @app.route("/", methods = ["GET", "POST"])
 @app.route("/login", methods = ["GET","POST"])
@@ -238,7 +237,7 @@ def analyse():
 @app.route("/analyse/pie_chart")
 def pie_chart():
     return render_template("pie_chart.html", title = "Book Composition",
-                           composition_comment=composition_comment)
+                           composition_comment=AI_commentary.composition_comment)
 
 @app.route("/analyse/update/composition", methods=["GET"])
 def update_composition():
@@ -259,7 +258,7 @@ def update_composition():
 @app.route("/analyse/avg_price_category")
 def avg_price_chart():
     return render_template("avg_price_chart.html", title = "Avarage Price per Category",
-                           avg_price_comment=avg_price_comment)
+                           avg_price_comment=AI_commentary.avg_price_comment)
 
 @app.route("/analyse/update/avg_price", methods=["GET"])
 def update_avg_price():
@@ -280,7 +279,7 @@ def update_avg_price():
 @app.route("/analyse/price_review")
 def price_review_chart():
     return render_template("price_review_chart.html", title = "Review vs Price",
-                           price_review_comment=price_review_comment)
+                           price_review_comment=AI_commentary.price_review_comment)
 
 @app.route("/analyse/update/price_review", methods=["GET"])
 def update_price_review():
@@ -302,7 +301,7 @@ def update_price_review():
 @app.route("/analyse/avg_review_category")
 def avg_review_chart():
     return render_template("avg_review_chart.html", title = "Avarage Review per Category",
-                           avg_review_comment=avg_review_comment)
+                           avg_review_comment=AI_commentary.avg_review_comment)
 
 @app.route("/analyse/update/avg_review", methods=["GET"])
 def update_avg_review():

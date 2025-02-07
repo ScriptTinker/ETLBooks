@@ -18,7 +18,7 @@ ai_model = pipeline(
     "text-generation",
     #model="HuggingFaceH4/zephyr-7b-beta",
     model="distilgpt2",
-    device_map="auto")
+    device_map="cpu")
 
 
 def ai_response(prompt):
