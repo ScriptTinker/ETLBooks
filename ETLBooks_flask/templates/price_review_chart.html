@@ -1,6 +1,5 @@
 {% extends "layout2.html" %}
 {% block content %}
-    <h1>Book Category Composition</h1>
      <div class="container justify-content">
         <div class="row">
             <div class="embed-responsive embed-responsive-1by1 col-md-6">
@@ -15,7 +14,7 @@
                         </button>
                     </a>
                     <a href="{{url_for('update_price_review')}}">
-                        <button class="btn btn-primary">
+                        <button class="btn btn-primary" id="refreshButton">
                             Refresh
                         </button>
                     </a>
@@ -23,4 +22,20 @@
             </div>
         </div>
     </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const refreshButton = document.getElementById('refreshButton');
+
+            function updateData() {
+                fetch("/analyse/update/price_review")
+                .then(response => response.json())
+                .then(data => {
+                    window.location.replace(data.redirect_url);
+            });
+        }
+            refreshButton.addEventListener('click', function(){
+                updateData();
+            });
+        });
+    </script>
 {% endblock %} 

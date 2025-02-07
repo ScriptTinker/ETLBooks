@@ -13,13 +13,29 @@
                         <button class="btn btn-primary">
                             Go fullscreen
                         </button>
-                        <a href="{{url_for('update_composition')}}">
-                        <button class="btn btn-primary">
-                            Refresh
-                        </button>
-                    </a>
+                    </a>    
+                    <button class="btn btn-primary" id="refreshButton">
+                        Refresh
+                    </button>
                 </div>
             </div>
         </div>
     </div>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const refreshButton = document.getElementById('refreshButton');
+
+            function updateData() {
+                fetch("/analyse/update/composition")
+                .then(response => response.json())
+                .then(data => {
+                    window.location.replace(data.redirect_url);
+            });
+        }
+            refreshButton.addEventListener('click', function(){
+                updateData();
+            });
+        });
+    </script>
 {% endblock %} 

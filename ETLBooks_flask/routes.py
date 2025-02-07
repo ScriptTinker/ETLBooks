@@ -254,7 +254,7 @@ def update_composition():
     df = cleaning_composition_data()
     AI_commentary.composition_comment = generate_composition_comment(df)
     
-    return redirect(url_for('pie_chart'))
+    return jsonify({"redirect_url": url_for('pie_chart')})
 
 @app.route("/analyse/avg_price_category")
 def avg_price_chart():
@@ -275,7 +275,7 @@ def update_avg_price():
     df = cleaning_avg_price_data()
     AI_commentary.avg_price_comment = generate_avg_price_comment(df)
     
-    return redirect(url_for('pie_chart'))
+    return jsonify({"redirect_url": url_for('avg_price_chart')})
 
 @app.route("/analyse/price_review")
 def price_review_chart():
@@ -296,7 +296,8 @@ def update_price_review():
     df = cleaning_price_review_data()
     AI_commentary.price_review_comment = generate_price_review_comment(df)
     
-    return redirect(url_for('pie_chart'))
+    return jsonify({"redirect_url": url_for('price_review_chart')})
+
 
 @app.route("/analyse/avg_review_category")
 def avg_review_chart():
@@ -318,7 +319,7 @@ def update_avg_review():
     df = cleaning_avg_review_data()
     AI_commentary.avg_review_comment = generate_avg_review_comment(df)
     
-    return redirect(url_for('pie_chart'))
+    return jsonify({"redirect_url": url_for('avg_review_chart')})
                 
 def send_reset_email(user):
     token = user.get_reset_token()

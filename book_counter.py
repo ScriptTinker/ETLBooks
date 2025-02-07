@@ -10,7 +10,7 @@ def checkPagination(url):
     return next_button is not None
 
 def retry_scrape(url):
-    for i in range (1,3):
+    for i in range (1,3):    
         response = requests.get(url)
         if response.status_code == 200:
             return response
