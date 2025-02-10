@@ -4,7 +4,7 @@ This projects requires a Nvidia GPU to run! However here's a way to test it with
 
 # Google Colab
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ScriptTinker/ETLBooks/blob/main/ETLBooks_demo.ipynb/authuser=1)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/ScriptTinker/ETLBooks/blob/main/ETLBooks_demo.ipynb/authuser=0)
 
 Here's a guide on how to use google colab:
 
