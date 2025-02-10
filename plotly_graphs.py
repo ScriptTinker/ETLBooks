@@ -157,7 +157,10 @@ with app.app_context():
     def cleaning_price_review_data():
             try:
                 books_price_review = Book.query.all()
-                df_price_review = pd.DataFrame([book.__dict__ for book in books_price_review]) if books_price_review else pd.DataFrame()
+                books_price_review_data = [book.__dict__ for book in books_price_review]
+
+                return pd.DataFrame(books_price_review_data)
+                
             except Exception as e:
                 df_price_review = pd.DataFrame()
                 print(f"Database error: {str(e)}")
@@ -198,6 +201,10 @@ with app.app_context():
                     Input('date-picker-range', 'end_date')
                 )
                 def update_scatter_plot(start_date, end_date):
+                    df_price_review = cleaning_price_review_data()
+    
+                    if df_price_review.empty:
+                        return px.scatter(title="No data available")
                     try:
                         df_filtered = df_price_review[
                             (df_price_review['date_extracted'] >= pd.to_datetime(start_date)) & 
@@ -242,7 +249,6 @@ with app.app_context():
     def cleaning_avg_review_data():          
             try:
                 books_avg_review = Book.query.all()
-                # Extract necessary fields explicitly to avoid SQLAlchemy internal attributes
                 books_avg_review_data = [book.__dict__ for book in books_avg_review]
             except Exception as e:
                 print(f"Database error: {str(e)}")

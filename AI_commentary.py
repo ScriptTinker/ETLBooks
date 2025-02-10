@@ -5,13 +5,17 @@ import os
 from plotly_graphs import (cleaning_composition_data,cleaning_avg_price_data,
                            cleaning_price_review_data,cleaning_avg_review_data)
 import torch
+from transformers import pipeline
+
+composition_comment = None
+avg_price_comment = None
+price_review_comment = None
+avg_review_comment= None
 
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-from transformers import pipeline
-
-ai_model = pipeline("text-generation", model="HuggingFaceH4/zephyr-7b-beta",
-                    torch_dtype=torch.bfloat16)
+ai_model = pipeline("text-generation", model="distilgpt2",
+                    torch_dtype=torch.bfloat16, device_map="auto")
 
 
 def ai_response(prompt):
@@ -65,7 +69,8 @@ def generate_avg_price_comment(df_avg_price):
     prompt=f"""
     Analyse the following average data on book sales and point out any intresting trends or situations:
     {avg_price_per_category}
-    """
+    Commentary:""" 
+
     
     comment = ai_response(prompt)
     
@@ -86,7 +91,9 @@ def generate_price_review_comment(df_price_review):
     prompt=f"""Following the data below can you explain how the lowess line moves at this moment and explain what is the
     trend for reviews and price?: 
     {df_latest}
-    """
+    
+    Commentary:""" 
+    
     comment = ai_response(prompt)
     
     return comment
@@ -109,7 +116,9 @@ def generate_avg_review_comment(df_avg_review):
     prompt=f"""Following the data below can you explain how the lowess line moves at this moment and explain what is the
     trend for reviews and price?: 
     {avg_review_per_category}
-    """
+    
+    Commentary:""" 
+
     comment = ai_response(prompt)
     
     return comment
