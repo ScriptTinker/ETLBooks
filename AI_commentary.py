@@ -1,23 +1,17 @@
 from ETLBooks_flask import app
 import pandas as pd
 from transformers import pipeline
-import logging
 import os
 from plotly_graphs import (cleaning_composition_data,cleaning_avg_price_data,
                            cleaning_price_review_data,cleaning_avg_review_data)
-
-composition_comment=None
+import torch
 
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-logging.getLogger("transformers").setLevel(logging.ERROR)
-
 from transformers import pipeline
 
-ai_model = pipeline(
-    "text-generation",
-    model="HuggingFaceH4/zephyr-7b-beta",
-    )
+ai_model = pipeline("text-generation", model="HuggingFaceH4/zephyr-7b-beta",
+                    torch_dtype=torch.bfloat16)
 
 
 def ai_response(prompt):
