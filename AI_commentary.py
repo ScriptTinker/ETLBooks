@@ -14,7 +14,7 @@ avg_review_comment= None
 
 os.environ['TF_ENABLE_ONEDNN_OPTS'] = '0'
 
-ai_model = pipeline("text-generation", model="distilgpt2",
+ai_model = pipeline("text-generation", model="HuggingFaceH4/zephyr-7b-beta",
                     torch_dtype=torch.bfloat16, device_map="auto")
 
 

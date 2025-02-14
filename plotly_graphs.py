@@ -157,10 +157,7 @@ with app.app_context():
     def cleaning_price_review_data():
             try:
                 books_price_review = Book.query.all()
-                books_price_review_data = [book.__dict__ for book in books_price_review]
-
-                return pd.DataFrame(books_price_review_data)
-                
+                df_price_review = pd.DataFrame([book.__dict__ for book in books_price_review]) if books_price_review else pd.DataFrame()
             except Exception as e:
                 df_price_review = pd.DataFrame()
                 print(f"Database error: {str(e)}")
@@ -201,10 +198,6 @@ with app.app_context():
                     Input('date-picker-range', 'end_date')
                 )
                 def update_scatter_plot(start_date, end_date):
-                    df_price_review = cleaning_price_review_data()
-    
-                    if df_price_review.empty:
-                        return px.scatter(title="No data available")
                     try:
                         df_filtered = df_price_review[
                             (df_price_review['date_extracted'] >= pd.to_datetime(start_date)) & 
@@ -224,8 +217,7 @@ with app.app_context():
                         )
                     except Exception as e:
                         return px.scatter(title=f"Error: {str(e)}")
-                    
-                # Making a default thumbnail using the lastest extracted date:
+                 # Making a default thumbnail using the lastest extracted date:
                 latest_date = df_price_review['date_extracted'].max()
                 df_latest = df_price_review[df_price_review['date_extracted'] == latest_date]
                 default_price_review_fig = px.scatter(
@@ -238,8 +230,9 @@ with app.app_context():
                         )
                 return default_price_review_fig
                 # Making a default thumbnail using the lastest extracted date
+                
             except Exception as e:
-                dash_price_review.layout = create_error_layout(f"Error setting up price-review analysis: {str(e)}")
+                dash_price_review.layout = create_error_layout(f"Error setting up price-review analysis: {str(e)}")    
                 
     """
     Our fourth graph would be an average review per category to see which category dominates in costumer
