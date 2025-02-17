@@ -12,9 +12,9 @@ https://dashboard.ngrok.com/login
 
 ## 2. Once you created you account go to the "Your Authtoken tab and copy your ngrok token:
 
-<img src="colab/images/tutorial_img_1.png" width="400" height="300" alt="Description">
+<img src="colab/images/tutorial_img_1.png" width="500" height="350" alt="Description">
 
-<img src="colab/images/tutorial_img_2.png" width="400" height="300" alt="Description">
+<img src="colab/images/tutorial_img_2.png" width="500" height="350" alt="Description">
 
 ## 3. Click on the link below
 
@@ -22,7 +22,7 @@ https://dashboard.ngrok.com/login
 
 ## 4. Replace "$YOUR_AUTHTOKEN" with your actual token:
 
-<img src="colab/images/tutorial_img_3.png" width="400" height="300" alt="Description">
+<img src="colab/images/tutorial_img_3.png" width="500" height="350" alt="Description">
 
 ## 5. Click on the arrow with white background close to the code cell:
 
